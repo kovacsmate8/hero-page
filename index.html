@@ -946,3 +946,1075 @@
 
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TERMINAL.GLASS - Dashboard & Contact</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-bg: #000000;
+            --color-surface: #0A0A0A;
+            --color-text: #FFFFFF;
+            --color-accent: #00FF88;
+            --color-danger: #FF0055;
+            --color-dim: rgba(255, 255, 255, 0.3);
+            --glass-layer: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(0, 255, 136, 0.2);
+            --glass-glow: rgba(0, 255, 136, 0.4);
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-mono);
+            background: var(--color-bg);
+            color: var(--color-text);
+            overflow-x: hidden;
+        }
+
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           SCANLINE
+           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(180deg, transparent, var(--color-accent), transparent);
+            opacity: 0.2;
+            animation: scanline 8s linear infinite;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(200vh); }
+        }
+
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           NAVIGATION
+           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            backdrop-filter: blur(12px) saturate(180%);
+            background: rgba(0, 0, 0, 0.8);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .nav-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-accent);
+            letter-spacing: -1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--color-accent);
+        }
+
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           DASHBOARD SECTION
+           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+        .dashboard-section {
+            min-height: 100vh;
+            padding: 96px 24px 48px;
+        }
+
+        .dashboard-container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .dashboard-header {
+            margin-bottom: 48px;
+        }
+
+        .dashboard-title {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+            letter-spacing: -2px;
+        }
+
+        .dashboard-subtitle {
+            font-size: 14px;
+            color: var(--color-dim);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        /* Glass Card Base */
+        .glass-card {
+            backdrop-filter: blur(12px) saturate(180%);
+            background: var(--glass-layer);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(0, 255, 136, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Metric Card */
+        .metric-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--color-dim);
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .metric-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+
+        .metric-unit {
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--color-dim);
+        }
+
+        .metric-change {
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .metric-change.positive {
+            color: var(--color-accent);
+        }
+
+        .metric-change.negative {
+            color: var(--color-danger);
+        }
+
+        .metric-spark {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 40px;
+            opacity: 0.3;
+        }
+
+        /* Chart Card */
+        .chart-card {
+            grid-column: span 2;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .chart-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+
+        .chart-period {
+            font-size: 12px;
+            color: var(--color-dim);
+        }
+
+        .chart-container {
+            height: 200px;
+            position: relative;
+        }
+
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 100%;
+            gap: 4px;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(180deg, var(--color-accent), transparent);
+            border-radius: 2px 2px 0 0;
+            transition: all 0.3s;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .chart-bar:hover {
+            background: var(--color-accent);
+            box-shadow: 0 0 20px var(--glass-glow);
+        }
+
+        .chart-bar-value {
+            position: absolute;
+            top: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            color: var(--color-accent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .chart-bar:hover .chart-bar-value {
+            opacity: 1;
+        }
+
+        /* Activity Feed */
+        .activity-card {
+            grid-column: span 2;
+        }
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px;
+            border-left: 2px solid var(--glass-border);
+            transition: all 0.3s;
+        }
+
+        .activity-item:hover {
+            border-left-color: var(--color-accent);
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        .activity-icon {
+            width: 32px;
+            height: 32px;
+            border: 2px solid var(--color-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-size: 14px;
+            color: var(--color-text);
+            margin-bottom: 4px;
+        }
+
+        .activity-time {
+            font-size: 11px;
+            color: var(--color-dim);
+        }
+
+        .activity-status {
+            width: 8px;
+            height: 8px;
+            background: var(--color-accent);
+            border-radius: 50%;
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* System Status */
+        .status-grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 2px;
+        }
+
+        .status-label {
+            font-size: 12px;
+            color: var(--color-dim);
+        }
+
+        .status-value {
+            font-size: 14px;
+            color: var(--color-accent);
+            font-weight: 700;
+        }
+
+        .status-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .status-bar-fill {
+            height: 100%;
+            background: var(--color-accent);
+            border-radius: 2px;
+            transition: width 1s ease-out;
+            box-shadow: 0 0 10px var(--glass-glow);
+        }
+
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           CONTACT SECTION
+           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+        .contact-section {
+            min-height: 100vh;
+            padding: 96px 24px 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contact-container {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .contact-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .contact-title {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -2px;
+        }
+
+        .contact-subtitle {
+            font-size: 16px;
+            color: var(--color-dim);
+        }
+
+        .contact-form {
+            backdrop-filter: blur(12px) saturate(180%);
+            background: var(--glass-layer);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 48px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group.full {
+            grid-column: span 2;
+        }
+
+        .form-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--color-accent);
+        }
+
+        .form-input,
+        .form-textarea {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 2px;
+            color: var(--color-text);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--color-accent);
+            box-shadow: 0 0 20px var(--glass-glow);
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 32px;
+        }
+
+        .form-info {
+            font-size: 11px;
+            color: var(--color-dim);
+        }
+
+        .btn-submit {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 700;
+            padding: 16px 32px;
+            background: var(--color-accent);
+            color: var(--color-bg);
+            border: 2px solid var(--color-accent);
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-submit:hover {
+            box-shadow: 0 0 30px var(--glass-glow);
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .btn-submit.sending {
+            background: transparent;
+            color: var(--color-accent);
+            pointer-events: none;
+        }
+
+        .btn-submit.success {
+            background: var(--color-accent);
+            animation: success-pulse 0.5s;
+        }
+
+        @keyframes success-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 48px;
+        }
+
+        .info-card {
+            text-align: center;
+            padding: 24px;
+            border: 1px solid var(--glass-border);
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        .info-card:hover {
+            border-color: var(--color-accent);
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        .info-icon {
+            font-size: 24px;
+            margin-bottom: 16px;
+            color: var(--color-accent);
+        }
+
+        .info-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--color-dim);
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .info-value {
+            font-size: 14px;
+            color: var(--color-text);
+        }
+
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           RESPONSIVE
+           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+        @media (max-width: 1400px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .chart-card,
+            .activity-card {
+                grid-column: span 2;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-card,
+            .activity-card {
+                grid-column: span 1;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: span 1;
+            }
+
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .dashboard-title,
+            .contact-title {
+                font-size: 32px;
+            }
+
+            .contact-form {
+                padding: 24px;
+            }
+
+            .form-footer {
+                flex-direction: column;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="scanline"></div>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+         NAVIGATION
+         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">TERMINAL.GLASS</div>
+            <div class="nav-links">
+                <a href="#dashboard" class="nav-link active">Dashboard</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+         DASHBOARD SECTION
+         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <section class="dashboard-section" id="dashboard">
+        <div class="dashboard-container">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">System Dashboard</h1>
+                <div class="dashboard-subtitle">REAL-TIME METRICS // LIVE UPDATES</div>
+            </div>
+
+            <!-- Metrics Row -->
+            <div class="dashboard-grid">
+                <div class="glass-card metric-card">
+                    <div class="metric-label">Active Users</div>
+                    <div class="metric-value">
+                        <span id="metric-users">2,847</span>
+                    </div>
+                    <div class="metric-change positive">
+                        <span>↑</span>
+                        <span id="change-users">12.5%</span>
+                    </div>
+                    <svg class="metric-spark" id="spark-users"></svg>
+                </div>
+
+                <div class="glass-card metric-card">
+                    <div class="metric-label">Response Time</div>
+                    <div class="metric-value">
+                        <span id="metric-response">42</span>
+                        <span class="metric-unit">ms</span>
+                    </div>
+                    <div class="metric-change positive">
+                        <span>↓</span>
+                        <span id="change-response">8.2%</span>
+                    </div>
+                    <svg class="metric-spark" id="spark-response"></svg>
+                </div>
+
+                <div class="glass-card metric-card">
+                    <div class="metric-label">CPU Usage</div>
+                    <div class="metric-value">
+                        <span id="metric-cpu">67</span>
+                        <span class="metric-unit">%</span>
+                    </div>
+                    <div class="metric-change negative">
+                        <span>↑</span>
+                        <span id="change-cpu">3.1%</span>
+                    </div>
+                    <svg class="metric-spark" id="spark-cpu"></svg>
+                </div>
+
+                <div class="glass-card metric-card">
+                    <div class="metric-label">Memory</div>
+                    <div class="metric-value">
+                        <span id="metric-memory">8.2</span>
+                        <span class="metric-unit">GB</span>
+                    </div>
+                    <div class="metric-change positive">
+                        <span>↓</span>
+                        <span id="change-memory">1.8%</span>
+                    </div>
+                    <svg class="metric-spark" id="spark-memory"></svg>
+                </div>
+            </div>
+
+            <!-- Charts & Activity Row -->
+            <div class="dashboard-grid">
+                <div class="glass-card chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title">Traffic Overview</div>
+                        <div class="chart-period">Last 24 Hours</div>
+                    </div>
+                    <div class="chart-container">
+                        <div class="chart-bars" id="traffic-chart"></div>
+                    </div>
+                </div>
+
+                <div class="glass-card activity-card">
+                    <div class="chart-header">
+                        <div class="chart-title">Recent Activity</div>
+                        <div class="chart-period">Live Feed</div>
+                    </div>
+                    <div class="activity-list" id="activity-feed">
+                        <div class="activity-item">
+                            <div class="activity-icon">✓</div>
+                            <div class="activity-content">
+                                <div class="activity-title">System health check completed</div>
+                                <div class="activity-time">2 minutes ago</div>
+                            </div>
+                            <div class="activity-status"></div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">↑</div>
+                            <div class="activity-content">
+                                <div class="activity-title">Database backup initiated</div>
+                                <div class="activity-time">5 minutes ago</div>
+                            </div>
+                            <div class="activity-status"></div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">⚡</div>
+                            <div class="activity-content">
+                                <div class="activity-title">API response time optimized</div>
+                                <div class="activity-time">12 minutes ago</div>
+                            </div>
+                            <div class="activity-status"></div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">◼</div>
+                            <div class="activity-content">
+                                <div class="activity-title">New user registration: user_4572</div>
+                                <div class="activity-time">18 minutes ago</div>
+                            </div>
+                            <div class="activity-status"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Status Row -->
+            <div class="dashboard-grid">
+                <div class="glass-card">
+                    <div class="chart-title" style="margin-bottom: 16px;">System Status</div>
+                    <div class="status-grid">
+                        <div class="status-item">
+                            <span class="status-label">API Server</span>
+                            <span class="status-value" id="status-api">ONLINE</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Database</span>
+                            <span class="status-value" id="status-db">ONLINE</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">CDN</span>
+                            <span class="status-value" id="status-cdn">ONLINE</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <div class="chart-title" style="margin-bottom: 16px;">Network</div>
+                    <div class="status-item">
+                        <span class="status-label">Bandwidth Usage</span>
+                        <span class="status-value" id="bandwidth">742 MB/s</span>
+                    </div>
+                    <div class="status-bar">
+                        <div class="status-bar-fill" id="bandwidth-bar" style="width: 74%"></div>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <div class="chart-title" style="margin-bottom: 16px;">Storage</div>
+                    <div class="status-item">
+                        <span class="status-label">Disk Space</span>
+                        <span class="status-value" id="storage">456 GB / 1 TB</span>
+                    </div>
+                    <div class="status-bar">
+                        <div class="status-bar-fill" id="storage-bar" style="width: 45%"></div>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <div class="chart-title" style="margin-bottom: 16px;">Uptime</div>
+                    <div class="status-item">
+                        <span class="status-label">System Uptime</span>
+                        <span class="status-value" id="uptime">99.97%</span>
+                    </div>
+                    <div class="status-bar">
+                        <div class="status-bar-fill" style="width: 99.97%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+         CONTACT SECTION
+         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <section class="contact-section" id="contact">
+        <div class="contact-container">
+            <div class="contact-header">
+                <h2 class="contact-title">Initiate Contact</h2>
+                <p class="contact-subtitle">Secure encrypted communication channel</p>
+            </div>
+
+            <form class="contact-form" id="contact-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label" for="name">Name</label>
+                        <input class="form-input" type="text" id="name" placeholder="John Doe" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email</label>
+                        <input class="form-input" type="email" id="email" placeholder="user@terminal.glass" required>
+                    </div>
+
+                    <div class="form-group full">
+                        <label class="form-label" for="subject">Subject</label>
+                        <input class="form-input" type="text" id="subject" placeholder="System inquiry" required>
+                    </div>
+
+                    <div class="form-group full">
+                        <label class="form-label" for="message">Message</label>
+                        <textarea class="form-textarea" id="message" placeholder="Enter your message here..." required></textarea>
+                    </div>
+                </div>
+
+                <div class="form-footer">
+                    <div class="form-info">All communications are encrypted using AES-256</div>
+                    <button class="btn-submit" type="submit">
+                        <span class="btn-text">Transmit</span>
+                    </button>
+                </div>
+            </form>
+
+            <div class="contact-info">
+                <div class="info-card">
+                    <div class="info-icon">📍</div>
+                    <div class="info-label">Location</div>
+                    <div class="info-value">Tokyo, Japan</div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">✉</div>
+                    <div class="info-label">Email</div>
+                    <div class="info-value">contact@terminal.glass</div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">⚡</div>
+                    <div class="info-label">Response Time</div>
+                    <div class="info-value">&lt; 24 hours</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // DASHBOARD REAL-TIME UPDATES
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        // Update metrics with random values
+        function updateMetrics() {
+            // Active Users
+            const users = Math.floor(2800 + Math.random() * 100);
+            document.getElementById('metric-users').textContent = users.toLocaleString();
+            
+            // Response Time
+            const response = Math.floor(40 + Math.random() * 10);
+            document.getElementById('metric-response').textContent = response;
+            
+            // CPU Usage
+            const cpu = Math.floor(65 + Math.random() * 10);
+            document.getElementById('metric-cpu').textContent = cpu;
+            
+            // Memory
+            const memory = (8 + Math.random() * 0.5).toFixed(1);
+            document.getElementById('metric-memory').textContent = memory;
+        }
+
+        // Initialize traffic chart
+        function initTrafficChart() {
+            const container = document.getElementById('traffic-chart');
+            const hours = 24;
+            
+            for (let i = 0; i < hours; i++) {
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar';
+                const height = Math.random() * 100;
+                bar.style.height = height + '%';
+                
+                const value = document.createElement('div');
+                value.className = 'chart-bar-value';
+                value.textContent = Math.floor(height * 10) + 'K';
+                bar.appendChild(value);
+                
+                container.appendChild(bar);
+            }
+        }
+
+        // Animate chart bars
+        function animateChart() {
+            const bars = document.querySelectorAll('.chart-bar');
+            bars.forEach(bar => {
+                const newHeight = Math.random() * 100;
+                bar.style.height = newHeight + '%';
+                bar.querySelector('.chart-bar-value').textContent = Math.floor(newHeight * 10) + 'K';
+            });
+        }
+
+        // Add new activity
+        function addActivity() {
+            const activities = [
+                { icon: '✓', title: 'Security scan completed', time: 'Just now' },
+                { icon: '↑', title: 'Cache cleared successfully', time: 'Just now' },
+                { icon: '⚡', title: 'Performance boost applied', time: 'Just now' },
+                { icon: '◼', title: 'New deployment detected', time: 'Just now' },
+            ];
+            
+            const activity = activities[Math.floor(Math.random() * activities.length)];
+            const feed = document.getElementById('activity-feed');
+            
+            const item = document.createElement('div');
+            item.className = 'activity-item';
+            item.style.opacity = '0';
+            item.innerHTML = `
+                <div class="activity-icon">${activity.icon}</div>
+                <div class="activity-content">
+                    <div class="activity-title">${activity.title}</div>
+                    <div class="activity-time">${activity.time}</div>
+                </div>
+                <div class="activity-status"></div>
+            `;
+            
+            feed.insertBefore(item, feed.firstChild);
+            
+            setTimeout(() => {
+                item.style.transition = 'opacity 0.5s';
+                item.style.opacity = '1';
+            }, 100);
+            
+            if (feed.children.length > 4) {
+                feed.removeChild(feed.lastChild);
+            }
+        }
+
+        // Update bandwidth
+        function updateBandwidth() {
+            const bandwidth = Math.floor(700 + Math.random() * 100);
+            const percent = Math.floor((bandwidth / 1000) * 100);
+            document.getElementById('bandwidth').textContent = bandwidth + ' MB/s';
+            document.getElementById('bandwidth-bar').style.width = percent + '%';
+        }
+
+        // Initialize
+        initTrafficChart();
+        
+        // Set intervals for real-time updates
+        setInterval(updateMetrics, 3000);
+        setInterval(animateChart, 5000);
+        setInterval(addActivity, 8000);
+        setInterval(updateBandwidth, 4000);
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // CONTACT FORM
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const btn = this.querySelector('.btn-submit');
+            const btnText = btn.querySelector('.btn-text');
+            
+            // Sending state
+            btn.classList.add('sending');
+            btnText.textContent = 'TRANSMITTING...';
+            
+            // Simulate sending
+            setTimeout(() => {
+                btnText.textContent = 'TRANSMITTED';
+                btn.classList.remove('sending');
+                btn.classList.add('success');
+                
+                // Reset form
+                setTimeout(() => {
+                    this.reset();
+                    btnText.textContent = 'TRANSMIT';
+                    btn.classList.remove('success');
+                }, 2000);
+            }, 2000);
+        });
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // NAVIGATION
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                const target = this.getAttribute('href');
+                document.querySelector(target).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Update active nav on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section');
+            const scrollPos = window.scrollY + 100;
+            
+            sections.forEach(section => {
+                const top = section.offsetTop;
+                const height = section.offsetHeight;
+                const id = section.getAttribute('id');
+                
+                if (scrollPos >= top && scrollPos < top + height) {
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === '#' + id) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
