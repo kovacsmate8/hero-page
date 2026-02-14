@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TERMINAL.GLASS - Tactical Interface</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-bg: #000000;
+            --color-surface: #0A0A0A;
+            --color-text: #FFFFFF;
+            --color-accent: #00FF88;
+            --color-danger: #FF0055;
+            --glass-layer: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(0, 255, 136, 0.2);
+            --glass-glow: rgba(0, 255, 136, 0.4);
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+        }
+
+        body {
+            font-family: var(--font-mono);
+            background: var(--color-bg);
+            color: var(--color-text);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .tactical-interface {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            grid-template-rows: auto 1fr auto;
+            gap: 24px;
+            padding: 24px;
+        }
+
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           TOP BAR
+           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+        .top-bar {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 16px;
+        }
+
+        .status-dots {
+            display: flex;
+            gap: 12px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--color-accent);
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+
+        .dot:nth-child(2) { animation-delay: 0.3s; }
+        .dot:nth-child(3) { animation-delay: 0.6s; }
+        .dot:nth-child(4) { animation-delay: 0.9s; }
+        .dot:nth-child(5) { animation-delay: 1.2s; }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .system-title {
+            font-size: 12px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--color-accent);
+        }
+
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           LEFT PANEL
+           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .sequence-display {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .seq-number {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+
+        .seq-indicator {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .seq-bar {
+            width: 24px;
+            height: 2px;
+            background: var(--color-accent);
+        }
+
+        .seq-icon {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--color-accent);
+            position: relative;
+        }
+
+        .seq-icon::after {
+            content: '';
+            position: absolute;
+            inset: 3px;
+            background: var(--color-accent);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            margin-top: 100px;
+        }
+
+        .action-btn {
+            width: 64px;
+            height: 64px;
+            border: 2px solid var(--glass-border);
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .action-btn::before,
+        .action-btn::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 2px;
+            background: var(--color-accent);
+        }
+
+        .action-btn::after {
+            transform: rotate(90deg);
+        }
+
+        .action-btn:hover {
+            border-color: var(--color-accent);
+            box-shadow: 0 0 20px var(--glass-glow);
+        }
+
+        .status-line {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .status-line::before {
+            content: '';
+            width: 100px;
+            height: 1px;
+            background: var(--glass-border);
+        }
+
+        .data-block {
+            margin-top: 32px;
+        }
+
+        .data-line {
+            font-size: 12px;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-top: 24px;
+        }
+
+        .data-cell {
+            width: 24px;
+            height: 24px;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .data-cell.active {
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+            box-shadow: 0 0 10px var(--glass-glow);
+        }
+
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           CENTER PANEL
+           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+        .center-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .calling-status {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 64px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .calling-status::before {
+            content: '';
+            width: 120px;
+            height: 1px;
+            background: var(--glass-border);
+        }
+
+        .main-display {
+            font-size: 14px;
+            line-height: 1.8;
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .display-line {
+            margin-bottom: 12px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .display-line-dashed {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .display-line-dashed::after {
+            content: '';
+            flex: 1;
+            max-width: 300px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+        }
+
+        .next-indicator {
+            margin-top: 64px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .next-indicator::after {
+            content: '';
+            width: 400px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+        }
+
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           RIGHT PANEL
+           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .info-group {
+            border-left: 1px solid var(--glass-border);
+            padding-left: 16px;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 4px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .info-value {
+            font-size: 14px;
+            color: var(--color-text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-dashes {
+            flex: 1;
+            height: 1px;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--glass-border) 0px,
+                var(--glass-border) 4px,
+                transparent 4px,
+                transparent 8px
+            );
+        }
+
+        .terminate-btn {
+            border: 2px solid var(--color-accent);
+            padding: 16px 32px;
+            background: transparent;
+            color: var(--color-accent);
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .terminate-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--color-accent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .terminate-btn:hover {
+            box-shadow: 0 0 30px var(--glass-glow);
+        }
+
+        .terminate-btn:hover::before {
+            opacity: 0.1;
+        }
+
+        .threat-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border: 1px solid var(--color-danger);
+            background: rgba(255, 0, 85, 0.1);
+            color: var(--color-danger);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .check-list {
+            margin-top: 16px;
+            font-size: 12px;
+            line-height: 2;
+        }
+
+        .check-item {
+            color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .check-dashes {
+            flex: 1;
+            height: 1px;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--glass-border) 0px,
+                var(--glass-border) 4px,
+                transparent 4px,
+                transparent 8px
+            );
+        }
+
+        .feedback-line {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 24px;
+        }
+
+        .feedback-line::before {
+            content: '';
+            width: 32px;
+            height: 1px;
+            background: var(--glass-border);
+        }
+
+        .ascii-art {
+            font-size: 8px;
+            line-height: 1;
+            color: rgba(0, 255, 136, 0.3);
+            white-space: pre;
+            font-family: monospace;
+        }
+
+        .grid-pattern {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 4px;
+            margin-top: 24px;
+        }
+
+        .grid-cell {
+            width: 16px;
+            height: 16px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .grid-cell.active {
+            border-color: var(--color-accent);
+            box-shadow: 0 0 8px var(--glass-glow);
+        }
+
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           BOTTOM BAR
+           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+        .bottom-bar {
+            grid-column: 1 / -1;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bottom-indicators {
+            display: flex;
+            gap: 32px;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .vertical-text {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            position: fixed;
+            right: 48px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .large-number {
+            font-size: 96px;
+            font-weight: 700;
+            color: rgba(0, 255, 136, 0.1);
+            position: fixed;
+            right: 64px;
+            bottom: 64px;
+            line-height: 1;
+        }
+
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           ANIMATIONS
+           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(180deg, transparent, var(--color-accent), transparent);
+            opacity: 0.3;
+            animation: scanline 8s linear infinite;
+            pointer-events: none;
+        }
+
+        .pulse-ring {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border: 1px solid var(--color-accent);
+            border-radius: 50%;
+            opacity: 0;
+            animation: pulse-ring 3s ease-out infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.8);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           RESPONSIVE
+           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+        @media (max-width: 1400px) {
+            .tactical-interface {
+                grid-template-columns: 1fr 1.5fr 1fr;
+                gap: 16px;
+                padding: 16px;
+            }
+
+            .large-number {
+                font-size: 64px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .tactical-interface {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto 1fr auto auto;
+            }
+
+            .left-panel,
+            .right-panel {
+                grid-column: 1;
+            }
+
+            .vertical-text {
+                display: none;
+            }
+
+            .large-number {
+                font-size: 48px;
+                bottom: 32px;
+                right: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="scanline"></div>
+
+    <div class="tactical-interface">
+        
+        <!-- TOP BAR -->
+        <div class="top-bar">
+            <div class="status-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+            <div class="system-title">CHECK CONNECT</div>
+        </div>
+
+        <!-- LEFT PANEL -->
+        <div class="left-panel">
+            <div class="sequence-display">
+                <span class="seq-number">002</span>
+                <div class="seq-indicator">
+                    <span class="seq-bar"></span>
+                    <div class="seq-icon"></div>
+                    <span class="seq-bar"></span>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="action-btn" aria-label="Action 1"></button>
+                <button class="action-btn" aria-label="Action 2"></button>
+                <button class="action-btn" aria-label="Action 3"></button>
+            </div>
+
+            <div class="status-line">
+                CALLING...
+            </div>
+
+            <div class="sequence-display">
+                <span class="seq-number">001</span>
+                <div class="seq-indicator">
+                    <span class="seq-bar"></span>
+                    <div class="seq-icon"></div>
+                    <span class="seq-bar"></span>
+                </div>
+            </div>
+
+            <div class="data-block">
+                <div class="data-line">M.LEVATOR VELIPALATINI MM CONSTRICTOPES PHARYN</div>
+                <div class="data-line">CONNECT -------- N.LARYNGEUS SUPERIOR CHECK</div>
+                <div class="data-line">RAMUS EXTERNUS CHECK --------------------------</div>
+            </div>
+
+            <div class="next-indicator">NEXT -------------------------------------------</div>
+
+            <div class="data-grid">
+                <div class="data-cell">■</div>
+                <div class="data-cell">■</div>
+                <div class="data-cell active">◼</div>
+                <div class="data-cell active">◼</div>
+                <div class="data-cell">◻</div>
+                <div class="data-cell">■</div>
+                <div class="data-cell">■</div>
+                <div class="data-cell">■</div>
+                <div class="data-cell">■</div>
+                <div class="data-cell">■</div>
+                <div class="data-cell">■</div>
+                <div class="data-cell">■</div>
+                <div class="data-cell">◻</div>
+                <div class="data-cell">■</div>
+                <div class="data-cell">■</div>
+            </div>
+
+            <div class="data-block" style="margin-top: 48px;">
+                <div class="data-line">PROPER VOLTAGE RAMIPHARYNGEI CALLING</div>
+                <div class="data-line">N.LARYNGEUS SUPERIOR CALL RAMI PHARYNGEI CHECK</div>
+                <div style="height: 24px;"></div>
+                <div class="data-line">PLEXUS PHARYNGEUS CALLING ------------------</div>
+                <div class="data-line">PLEXUS PHARYNGEUS CHECK --------------------</div>
+            </div>
+        </div>
+
+        <!-- CENTER PANEL -->
+        <div class="center-panel">
+            <div class="pulse-ring"></div>
+            
+            <div class="ascii-art">████████
+████████
+    ████
+    ████
+████████
+████████</div>
+
+            <div class="main-display" style="margin-top: 64px;">
+                <div class="display-line">NEURAL PATHWAY SYNCHRONIZATION INITIATED</div>
+                <div class="display-line">CORTICAL INTERFACE PROTOCOL v2.7.4</div>
+                <div class="display-line">QUANTUM ENCRYPTION: ACTIVE</div>
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL -->
+        <div class="right-panel">
+            <div class="info-group">
+                <div class="info-label">DISTRICT</div>
+                <div class="info-value">
+                    <span class="info-dashes"></span>
+                    <span>HOTEL MERCURY - TOKYO, JAPAN</span>
+                </div>
+            </div>
+
+            <div class="info-group">
+                <div class="info-label">GPS</div>
+                <div class="info-value">
+                    <span class="info-dashes"></span>
+                    <span>35.652832, 139.839478</span>
+                </div>
+            </div>
+
+            <div class="info-group">
+                <div class="info-label">STATUS</div>
+                <div class="info-value">
+                    <span class="info-dashes"></span>
+                    <span>ONGOING OPERATION</span>
+                </div>
+            </div>
+
+            <div class="info-group">
+                <div class="info-label">THREAT LEVEL</div>
+                <div class="info-value">
+                    <span class="info-dashes"></span>
+                    <span class="threat-badge">HIGH</span>
+                </div>
+            </div>
+
+            <div class="info-group" style="margin-top: 32px;">
+                <div class="info-value" style="font-size: 12px;">
+                    <span class="info-dashes"></span>
+                    <span>NCI AMBIGUUS CHECK - DORSALISN. VAGI</span>
+                </div>
+            </div>
+
+            <div class="info-group">
+                <div class="info-value" style="font-size: 12px;">
+                    <span class="info-dashes"></span>
+                    <span>NO REJECTION</span>
+                </div>
+            </div>
+
+            <button class="terminate-btn">TERMINATE</button>
+
+            <div class="check-list">
+                <div class="check-item">
+                    <span class="check-dashes"></span>
+                    <span>GANGLION SUPERIUS CALLER</span>
+                </div>
+                <div class="check-item">
+                    <span class="check-dashes"></span>
+                    <span>GANGLION SUPERIUS CHECK</span>
+                </div>
+            </div>
+
+            <div class="feedback-line">FEEDBACK TO BASE</div>
+
+            <div class="grid-pattern">
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell active"></div>
+                <div class="grid-cell active"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+            </div>
+
+            <div class="ascii-art" style="margin-top: 32px;">████████████████
+████        ████
+    ████████
+    ████████
+████        ████
+████████████████</div>
+        </div>
+
+        <!-- BOTTOM BAR -->
+        <div class="bottom-bar">
+            <div class="bottom-indicators">
+                <span>CORTICAL JUNCTURE PASS</span>
+                <span>ON DECISION</span>
+                <span>GANGLION SUPERIUS</span>
+                <span>GANGLION SUPERIUS</span>
+                <span>NCI. AMBIGUUS CHECK CALLER</span>
+            </div>
+
+            <div class="bottom-indicators">
+                <span>NCI. AMBIGUUS SEARCH SCAN IN PROTOCOL GORYS POLNT</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SIDE ELEMENTS -->
+    <div class="vertical-text">ACCESS</div>
+    <div class="large-number">75</div>
+
+    <script>
+        // Random grid cell activation
+        setInterval(() => {
+            const cells = document.querySelectorAll('.data-cell, .grid-cell');
+            cells.forEach(cell => {
+                if (Math.random() > 0.9) {
+                    cell.classList.toggle('active');
+                }
+            });
+        }, 2000);
+
+        // Terminate button interaction
+        document.querySelector('.terminate-btn').addEventListener('click', function() {
+            this.textContent = 'TERMINATING...';
+            setTimeout(() => {
+                this.textContent = 'TERMINATED';
+                this.style.borderColor = 'var(--color-danger)';
+                this.style.color = 'var(--color-danger)';
+            }, 1500);
+            setTimeout(() => {
+                this.textContent = 'TERMINATE';
+                this.style.borderColor = 'var(--color-accent)';
+                this.style.color = 'var(--color-accent)';
+            }, 4000);
+        });
+
+        // Action buttons interaction
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.style.borderColor = 'var(--color-accent)';
+                setTimeout(() => {
+                    this.style.borderColor = 'var(--glass-border)';
+                }, 300);
+            });
+        });
+
+        // Create additional pulse rings
+        const center = document.querySelector('.center-panel');
+        for (let i = 0; i < 3; i++) {
+            const ring = document.createElement('div');
+            ring.className = 'pulse-ring';
+            ring.style.animationDelay = `${i * 1}s`;
+            center.appendChild(ring);
+        }
+    </script>
+
+</body>
+</html>
