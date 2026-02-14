@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TERMINAL.GLASS - Tactical Interface</title>
+    <title>TERMINAL.GLASS - Dual Interface</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -20,52 +20,85 @@
             --color-text: #FFFFFF;
             --color-accent: #00FF88;
             --color-danger: #FF0055;
+            --color-dim: rgba(255, 255, 255, 0.3);
             --glass-layer: rgba(255, 255, 255, 0.03);
             --glass-border: rgba(0, 255, 136, 0.2);
             --glass-glow: rgba(0, 255, 136, 0.4);
             --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: var(--font-mono);
             background: var(--color-bg);
             color: var(--color-text);
-            overflow: hidden;
-            height: 100vh;
-        }
-
-        .tactical-interface {
-            width: 100vw;
-            height: 100vh;
-            position: relative;
-            display: grid;
-            grid-template-columns: 1fr 2fr 1fr;
-            grid-template-rows: auto 1fr auto;
-            gap: 24px;
-            padding: 24px;
+            overflow-x: hidden;
         }
 
         /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           TOP BAR
+           SCANLINE EFFECT
            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
-        .top-bar {
-            grid-column: 1 / -1;
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(180deg, transparent, var(--color-accent), transparent);
+            opacity: 0.2;
+            animation: scanline 8s linear infinite;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(200vh); }
+        }
+
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           SECTION 1 - DATA INTERFACE
+           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+        .section-1 {
+            min-height: 100vh;
+            padding: 48px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .data-container {
+            max-width: 1000px;
+            width: 100%;
+            backdrop-filter: blur(12px) saturate(180%);
+            background: var(--glass-layer);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 64px 48px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .top-indicators {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--glass-border);
-            padding-bottom: 16px;
+            margin-bottom: 48px;
         }
 
         .status-dots {
             display: flex;
-            gap: 12px;
+            gap: 8px;
         }
 
         .dot {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             background: var(--color-accent);
             border-radius: 50%;
             animation: blink 2s infinite;
@@ -73,29 +106,130 @@
 
         .dot:nth-child(2) { animation-delay: 0.3s; }
         .dot:nth-child(3) { animation-delay: 0.6s; }
-        .dot:nth-child(4) { animation-delay: 0.9s; }
-        .dot:nth-child(5) { animation-delay: 1.2s; }
 
         @keyframes blink {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.3; }
         }
 
-        .system-title {
+        .data-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+        }
+
+        .data-column {
+            font-size: 13px;
+            line-height: 1.9;
+        }
+
+        .data-block {
+            margin-bottom: 32px;
+            padding-left: 24px;
+            border-left: 2px solid var(--glass-border);
+            position: relative;
+        }
+
+        .data-block::before {
+            content: '››';
+            position: absolute;
+            left: -24px;
+            color: var(--color-accent);
             font-size: 12px;
-            letter-spacing: 4px;
-            text-transform: uppercase;
+        }
+
+        .data-line {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+
+        .data-marker {
             color: var(--color-accent);
         }
 
+        .data-dim {
+            color: var(--color-dim);
+        }
+
+        .data-highlight {
+            color: var(--color-accent);
+            font-weight: 700;
+        }
+
+        .data-box {
+            display: inline-block;
+            padding: 2px 8px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.02);
+            font-size: 11px;
+        }
+
+        .data-box.active {
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .nested-data {
+            margin-left: 32px;
+            margin-top: 8px;
+            padding-left: 16px;
+            border-left: 1px solid var(--glass-border);
+        }
+
+        .system-check {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 6px;
+        }
+
+        .hex-code {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .comment {
+            color: var(--color-dim);
+        }
+
+        .data-footer {
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--color-dim);
+        }
+
         /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           LEFT PANEL
+           SECTION 2 - TACTICAL INTERFACE
            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
+        .section-2 {
+            min-height: 100vh;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .tactical-container {
+            width: 100%;
+            max-width: 1600px;
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 32px;
+            padding: 24px;
+        }
+
+        /* LEFT PANEL */
         .left-panel {
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 32px;
         }
 
         .sequence-display {
@@ -109,7 +243,6 @@
         .seq-number {
             font-size: 20px;
             font-weight: 700;
-            color: var(--color-text);
         }
 
         .seq-indicator {
@@ -128,20 +261,11 @@
             width: 16px;
             height: 16px;
             border: 2px solid var(--color-accent);
-            position: relative;
-        }
-
-        .seq-icon::after {
-            content: '';
-            position: absolute;
-            inset: 3px;
-            background: var(--color-accent);
         }
 
         .action-buttons {
             display: flex;
             gap: 16px;
-            margin-top: 100px;
         }
 
         .action-btn {
@@ -175,71 +299,9 @@
             box-shadow: 0 0 20px var(--glass-glow);
         }
 
-        .status-line {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.5);
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .status-line::before {
-            content: '';
-            width: 100px;
-            height: 1px;
-            background: var(--glass-border);
-        }
-
-        .data-block {
-            margin-top: 32px;
-        }
-
-        .data-line {
-            font-size: 12px;
-            margin-bottom: 8px;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .data-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 8px;
-            margin-top: 24px;
-        }
-
-        .data-cell {
-            width: 24px;
-            height: 24px;
-            border: 1px solid var(--glass-border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .data-cell.active {
-            border-color: var(--color-accent);
-            color: var(--color-accent);
-            box-shadow: 0 0 10px var(--glass-glow);
-        }
-
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           CENTER PANEL
-           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-        .center-panel {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-
         .calling-status {
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.6);
-            margin-bottom: 64px;
+            color: rgba(255, 255, 255, 0.5);
             display: flex;
             align-items: center;
             gap: 8px;
@@ -252,78 +314,112 @@
             background: var(--glass-border);
         }
 
-        .main-display {
-            font-size: 14px;
+        .tech-lines {
+            font-size: 12px;
             line-height: 1.8;
-            text-align: center;
-            max-width: 600px;
+            color: rgba(255, 255, 255, 0.7);
         }
 
-        .display-line {
-            margin-bottom: 12px;
+        .next-line {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .next-line::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--glass-border), transparent);
+        }
+
+        .grid-dots {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-top: 24px;
+        }
+
+        .grid-dot {
+            width: 24px;
+            height: 24px;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+
+        .grid-dot.active {
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+            box-shadow: 0 0 8px var(--glass-glow);
+        }
+
+        /* CENTER PANEL */
+        .center-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .ascii-art {
+            font-size: 7px;
+            line-height: 1;
+            color: rgba(0, 255, 136, 0.3);
+            white-space: pre;
+            font-family: monospace;
+            margin-bottom: 48px;
+        }
+
+        .tech-display {
+            font-size: 13px;
+            line-height: 1.9;
+            text-align: center;
             color: rgba(255, 255, 255, 0.8);
         }
 
-        .display-line-dashed {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            justify-content: center;
-        }
-
-        .display-line-dashed::after {
-            content: '';
-            flex: 1;
-            max-width: 300px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
-        }
-
-        .next-indicator {
-            margin-top: 64px;
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.5);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .next-indicator::after {
-            content: '';
-            width: 400px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
-        }
-
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           RIGHT PANEL
-           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
+        /* RIGHT PANEL */
         .right-panel {
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 16px;
         }
 
-        .info-group {
-            border-left: 1px solid var(--glass-border);
-            padding-left: 16px;
+        .top-status-dots {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-bottom: 16px;
         }
 
-        .info-label {
+        .check-connect {
             font-size: 12px;
-            color: rgba(255, 255, 255, 0.5);
-            margin-bottom: 4px;
-            letter-spacing: 2px;
             text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--color-accent);
+            text-align: right;
+            margin-bottom: 32px;
         }
 
-        .info-value {
-            font-size: 14px;
-            color: var(--color-text);
+        .info-line {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
             display: flex;
             align-items: center;
             gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .info-label {
+            min-width: 100px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.5);
         }
 
         .info-dashes {
@@ -338,6 +434,16 @@
             );
         }
 
+        .threat-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border: 1px solid var(--color-danger);
+            background: rgba(255, 0, 85, 0.1);
+            color: var(--color-danger);
+            font-size: 10px;
+            font-weight: 700;
+        }
+
         .terminate-btn {
             border: 2px solid var(--color-accent);
             padding: 16px 32px;
@@ -349,71 +455,27 @@
             letter-spacing: 2px;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            margin-top: 32px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .terminate-btn::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: var(--color-accent);
-            opacity: 0;
-            transition: opacity 0.3s;
+            margin: 24px 0;
         }
 
         .terminate-btn:hover {
             box-shadow: 0 0 30px var(--glass-glow);
+            background: rgba(0, 255, 136, 0.1);
         }
 
-        .terminate-btn:hover::before {
-            opacity: 0.1;
-        }
-
-        .threat-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border: 1px solid var(--color-danger);
-            background: rgba(255, 0, 85, 0.1);
-            color: var(--color-danger);
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-
-        .check-list {
-            margin-top: 16px;
+        .check-items {
             font-size: 12px;
-            line-height: 2;
-        }
-
-        .check-item {
+            line-height: 1.8;
             color: rgba(255, 255, 255, 0.7);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .check-dashes {
-            flex: 1;
-            height: 1px;
-            background: repeating-linear-gradient(
-                90deg,
-                var(--glass-border) 0px,
-                var(--glass-border) 4px,
-                transparent 4px,
-                transparent 8px
-            );
         }
 
         .feedback-line {
-            font-size: 12px;
+            font-size: 11px;
             color: rgba(255, 255, 255, 0.5);
+            margin-top: 16px;
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-top: 24px;
         }
 
         .feedback-line::before {
@@ -423,52 +485,22 @@
             background: var(--glass-border);
         }
 
-        .ascii-art {
-            font-size: 8px;
-            line-height: 1;
-            color: rgba(0, 255, 136, 0.3);
-            white-space: pre;
-            font-family: monospace;
-        }
-
-        .grid-pattern {
+        .bottom-grid {
             display: grid;
             grid-template-columns: repeat(8, 1fr);
             gap: 4px;
-            margin-top: 24px;
+            margin-top: 16px;
         }
 
-        .grid-cell {
+        .bottom-grid-cell {
             width: 16px;
             height: 16px;
             border: 1px solid var(--glass-border);
         }
 
-        .grid-cell.active {
+        .bottom-grid-cell.active {
             border-color: var(--color-accent);
             box-shadow: 0 0 8px var(--glass-glow);
-        }
-
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           BOTTOM BAR
-           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-        .bottom-bar {
-            grid-column: 1 / -1;
-            border-top: 1px solid var(--glass-border);
-            padding-top: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .bottom-indicators {
-            display: flex;
-            gap: 32px;
-            font-size: 10px;
-            color: rgba(255, 255, 255, 0.4);
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .vertical-text {
@@ -491,49 +523,6 @@
             position: fixed;
             right: 64px;
             bottom: 64px;
-            line-height: 1;
-        }
-
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           ANIMATIONS
-           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-        @keyframes scanline {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100vh); }
-        }
-
-        .scanline {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(180deg, transparent, var(--color-accent), transparent);
-            opacity: 0.3;
-            animation: scanline 8s linear infinite;
-            pointer-events: none;
-        }
-
-        .pulse-ring {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            border: 1px solid var(--color-accent);
-            border-radius: 50%;
-            opacity: 0;
-            animation: pulse-ring 3s ease-out infinite;
-        }
-
-        @keyframes pulse-ring {
-            0% {
-                transform: scale(0.8);
-                opacity: 0.8;
-            }
-            100% {
-                transform: scale(1.5);
-                opacity: 0;
-            }
         }
 
         /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -541,10 +530,9 @@
            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
         @media (max-width: 1400px) {
-            .tactical-interface {
+            .tactical-container {
                 grid-template-columns: 1fr 1.5fr 1fr;
-                gap: 16px;
-                padding: 16px;
+                gap: 24px;
             }
 
             .large-number {
@@ -553,14 +541,13 @@
         }
 
         @media (max-width: 1024px) {
-            .tactical-interface {
+            .data-grid {
                 grid-template-columns: 1fr;
-                grid-template-rows: auto auto 1fr auto auto;
+                gap: 32px;
             }
 
-            .left-panel,
-            .right-panel {
-                grid-column: 1;
+            .tactical-container {
+                grid-template-columns: 1fr;
             }
 
             .vertical-text {
@@ -573,224 +560,357 @@
                 right: 32px;
             }
         }
+
+        @media (max-width: 768px) {
+            .data-container {
+                padding: 32px 24px;
+            }
+
+            .tactical-container {
+                padding: 16px;
+            }
+        }
     </style>
 </head>
 <body>
 
     <div class="scanline"></div>
 
-    <div class="tactical-interface">
-        
-        <!-- TOP BAR -->
-        <div class="top-bar">
-            <div class="status-dots">
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-            </div>
-            <div class="system-title">CHECK CONNECT</div>
-        </div>
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+         SECTION 1 - TACTICAL INTERFACE
+         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <section class="section-2">
+        <div class="tactical-container">
+            <!-- LEFT PANEL -->
+            <div class="left-panel">
+                <div class="sequence-display">
+                    <span class="seq-number">002</span>
+                    <div class="seq-indicator">
+                        <span class="seq-bar"></span>
+                        <div class="seq-icon"></div>
+                        <span class="seq-bar"></span>
+                    </div>
+                </div>
 
-        <!-- LEFT PANEL -->
-        <div class="left-panel">
-            <div class="sequence-display">
-                <span class="seq-number">002</span>
-                <div class="seq-indicator">
-                    <span class="seq-bar"></span>
-                    <div class="seq-icon"></div>
-                    <span class="seq-bar"></span>
+                <div class="status-dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn"></button>
+                    <button class="action-btn"></button>
+                    <button class="action-btn"></button>
+                </div>
+
+                <div class="calling-status">CALLING...</div>
+
+                <div class="sequence-display">
+                    <span class="seq-number">001</span>
+                    <div class="seq-indicator">
+                        <span class="seq-bar"></span>
+                        <div class="seq-icon"></div>
+                        <span class="seq-bar"></span>
+                    </div>
+                </div>
+
+                <div class="tech-lines">
+                    <div>M.LEVATOR VELIPALATINI MM CONSTRICTOPES PHARYN</div>
+                    <div>CONNECT -------- N.LARYNGEUS SUPERIOR CHECK</div>
+                    <div>RAMUS EXTERNUS CHECK --------------------------</div>
+                </div>
+
+                <div class="next-line">NEXT</div>
+
+                <div class="grid-dots">
+                    <div class="grid-dot">■</div>
+                    <div class="grid-dot">■</div>
+                    <div class="grid-dot active">◼</div>
+                    <div class="grid-dot active">◼</div>
+                    <div class="grid-dot">◻</div>
+                    <div class="grid-dot">■</div>
+                    <div class="grid-dot">■</div>
+                    <div class="grid-dot">■</div>
+                </div>
+
+                <div class="tech-lines" style="margin-top: 32px;">
+                    <div>PROPER VOLTAGE RAMIPHARYNGEI CALLING</div>
+                    <div>N.LARYNGEUS SUPERIOR CALL RAMI PHARYNGEI CHECK</div>
+                    <div style="height: 16px;"></div>
+                    <div>PLEXUS PHARYNGEUS CALLING ------------------</div>
+                    <div>PLEXUS PHARYNGEUS CHECK --------------------</div>
                 </div>
             </div>
 
-            <div class="action-buttons">
-                <button class="action-btn" aria-label="Action 1"></button>
-                <button class="action-btn" aria-label="Action 2"></button>
-                <button class="action-btn" aria-label="Action 3"></button>
-            </div>
-
-            <div class="status-line">
-                CALLING...
-            </div>
-
-            <div class="sequence-display">
-                <span class="seq-number">001</span>
-                <div class="seq-indicator">
-                    <span class="seq-bar"></span>
-                    <div class="seq-icon"></div>
-                    <span class="seq-bar"></span>
-                </div>
-            </div>
-
-            <div class="data-block">
-                <div class="data-line">M.LEVATOR VELIPALATINI MM CONSTRICTOPES PHARYN</div>
-                <div class="data-line">CONNECT -------- N.LARYNGEUS SUPERIOR CHECK</div>
-                <div class="data-line">RAMUS EXTERNUS CHECK --------------------------</div>
-            </div>
-
-            <div class="next-indicator">NEXT -------------------------------------------</div>
-
-            <div class="data-grid">
-                <div class="data-cell">■</div>
-                <div class="data-cell">■</div>
-                <div class="data-cell active">◼</div>
-                <div class="data-cell active">◼</div>
-                <div class="data-cell">◻</div>
-                <div class="data-cell">■</div>
-                <div class="data-cell">■</div>
-                <div class="data-cell">■</div>
-                <div class="data-cell">■</div>
-                <div class="data-cell">■</div>
-                <div class="data-cell">■</div>
-                <div class="data-cell">■</div>
-                <div class="data-cell">◻</div>
-                <div class="data-cell">■</div>
-                <div class="data-cell">■</div>
-            </div>
-
-            <div class="data-block" style="margin-top: 48px;">
-                <div class="data-line">PROPER VOLTAGE RAMIPHARYNGEI CALLING</div>
-                <div class="data-line">N.LARYNGEUS SUPERIOR CALL RAMI PHARYNGEI CHECK</div>
-                <div style="height: 24px;"></div>
-                <div class="data-line">PLEXUS PHARYNGEUS CALLING ------------------</div>
-                <div class="data-line">PLEXUS PHARYNGEUS CHECK --------------------</div>
-            </div>
-        </div>
-
-        <!-- CENTER PANEL -->
-        <div class="center-panel">
-            <div class="pulse-ring"></div>
-            
-            <div class="ascii-art">████████
-████████
-    ████
-    ████
-████████
-████████</div>
-
-            <div class="main-display" style="margin-top: 64px;">
-                <div class="display-line">NEURAL PATHWAY SYNCHRONIZATION INITIATED</div>
-                <div class="display-line">CORTICAL INTERFACE PROTOCOL v2.7.4</div>
-                <div class="display-line">QUANTUM ENCRYPTION: ACTIVE</div>
-            </div>
-        </div>
-
-        <!-- RIGHT PANEL -->
-        <div class="right-panel">
-            <div class="info-group">
-                <div class="info-label">DISTRICT</div>
-                <div class="info-value">
-                    <span class="info-dashes"></span>
-                    <span>HOTEL MERCURY - TOKYO, JAPAN</span>
-                </div>
-            </div>
-
-            <div class="info-group">
-                <div class="info-label">GPS</div>
-                <div class="info-value">
-                    <span class="info-dashes"></span>
-                    <span>35.652832, 139.839478</span>
-                </div>
-            </div>
-
-            <div class="info-group">
-                <div class="info-label">STATUS</div>
-                <div class="info-value">
-                    <span class="info-dashes"></span>
-                    <span>ONGOING OPERATION</span>
-                </div>
-            </div>
-
-            <div class="info-group">
-                <div class="info-label">THREAT LEVEL</div>
-                <div class="info-value">
-                    <span class="info-dashes"></span>
-                    <span class="threat-badge">HIGH</span>
-                </div>
-            </div>
-
-            <div class="info-group" style="margin-top: 32px;">
-                <div class="info-value" style="font-size: 12px;">
-                    <span class="info-dashes"></span>
-                    <span>NCI AMBIGUUS CHECK - DORSALISN. VAGI</span>
-                </div>
-            </div>
-
-            <div class="info-group">
-                <div class="info-value" style="font-size: 12px;">
-                    <span class="info-dashes"></span>
-                    <span>NO REJECTION</span>
-                </div>
-            </div>
-
-            <button class="terminate-btn">TERMINATE</button>
-
-            <div class="check-list">
-                <div class="check-item">
-                    <span class="check-dashes"></span>
-                    <span>GANGLION SUPERIUS CALLER</span>
-                </div>
-                <div class="check-item">
-                    <span class="check-dashes"></span>
-                    <span>GANGLION SUPERIUS CHECK</span>
-                </div>
-            </div>
-
-            <div class="feedback-line">FEEDBACK TO BASE</div>
-
-            <div class="grid-pattern">
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell active"></div>
-                <div class="grid-cell active"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-            </div>
-
-            <div class="ascii-art" style="margin-top: 32px;">████████████████
+            <!-- CENTER PANEL -->
+            <div class="center-panel">
+                <div class="ascii-art">████████████████
 ████        ████
     ████████
     ████████
 ████        ████
 ████████████████</div>
-        </div>
 
-        <!-- BOTTOM BAR -->
-        <div class="bottom-bar">
-            <div class="bottom-indicators">
-                <span>CORTICAL JUNCTURE PASS</span>
-                <span>ON DECISION</span>
-                <span>GANGLION SUPERIUS</span>
-                <span>GANGLION SUPERIUS</span>
-                <span>NCI. AMBIGUUS CHECK CALLER</span>
+                <div class="tech-display">
+                    <div>NEURAL PATHWAY SYNCHRONIZATION INITIATED</div>
+                    <div>CORTICAL INTERFACE PROTOCOL v2.7.4</div>
+                    <div>QUANTUM ENCRYPTION: ACTIVE</div>
+                </div>
             </div>
 
-            <div class="bottom-indicators">
-                <span>NCI. AMBIGUUS SEARCH SCAN IN PROTOCOL GORYS POLNT</span>
+            <!-- RIGHT PANEL -->
+            <div class="right-panel">
+                <div class="top-status-dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+
+                <div class="check-connect">CHECK CONNECT</div>
+
+                <div class="ascii-art" style="margin-bottom: 24px;">████ ████████
+████ ████████
+████ ████
+████ ████
+████████████████
+████████████████</div>
+
+                <div class="info-line">
+                    <span class="info-label">DISTRICT</span>
+                    <span class="info-dashes"></span>
+                    <span>HOTEL MERCURY - TOKYO, JAPAN</span>
+                </div>
+
+                <div class="info-line">
+                    <span class="info-label">GPS</span>
+                    <span class="info-dashes"></span>
+                    <span>35.652832, 139.839478</span>
+                </div>
+
+                <div class="info-line">
+                    <span class="info-label">STATUS</span>
+                    <span class="info-dashes"></span>
+                    <span>ONGOING OPERATION</span>
+                </div>
+
+                <div class="info-line">
+                    <span class="info-label">THREAT LEVEL</span>
+                    <span class="info-dashes"></span>
+                    <span class="threat-badge">HIGH</span>
+                </div>
+
+                <div class="info-line" style="margin-top: 24px;">
+                    <span class="info-dashes"></span>
+                    <span>NCI AMBIGUUS CHECK - DORSALISN. VAGI</span>
+                </div>
+
+                <div class="info-line">
+                    <span class="info-dashes"></span>
+                    <span>NO REJECTION</span>
+                </div>
+
+                <button class="terminate-btn">TERMINATE</button>
+
+                <div class="check-items">
+                    <div>---------------- GANGLION SUPERIUS CALLER</div>
+                    <div>---------------- GANGLION SUPERIUS CHECK</div>
+                </div>
+
+                <div class="feedback-line">FEEDBACK TO BASE</div>
+
+                <div class="bottom-grid">
+                    <div class="bottom-grid-cell"></div>
+                    <div class="bottom-grid-cell"></div>
+                    <div class="bottom-grid-cell"></div>
+                    <div class="bottom-grid-cell"></div>
+                    <div class="bottom-grid-cell"></div>
+                    <div class="bottom-grid-cell"></div>
+                    <div class="bottom-grid-cell active"></div>
+                    <div class="bottom-grid-cell active"></div>
+                </div>
+
+                <div class="ascii-art" style="margin-top: 24px;">████████████████
+████        ████
+    ████████
+    ████████
+████        ████
+████████████████</div>
             </div>
         </div>
+    </section>
 
-    </div>
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+         SECTION 2 - DATA INTERFACE
+         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <section class="section-1">
+        <div class="data-container">
+            <div class="top-indicators">
+                <div class="status-dots">
+                    <div class="dot"></div>
+                </div>
+                <div class="status-dots">
+                    <div class="dot"></div>
+                </div>
+            </div>
 
-    <!-- SIDE ELEMENTS -->
+            <div class="data-grid">
+                <!-- LEFT COLUMN -->
+                <div class="data-column">
+                    <div class="data-block">
+                        <div class="data-line">
+                            <span class="data-marker">•</span>
+                            231K - 10.003 <span class="comment">// 0092091</span> 34018A 230ALU 12RKSJ
+                        </div>
+                        <div class="data-line" style="padding-left: 16px;">
+                            455.KL0.530 - 0003 <span class="comment">// 0092091</span> <span class="comment">//</span> <span class="data-box active">0011 MC</span>
+                        </div>
+                    </div>
+
+                    <div class="data-block">
+                        <div class="data-line">
+                            <span class="data-highlight">5555530010G003</span> <span class="comment">// 0092091</span> <span class="comment">//</span> <span class="data-box active">0011 MC</span>
+                        </div>
+                        <div class="data-line">
+                            <span class="data-highlight">5555530010G003</span> <span class="comment">// 009<span class="data-dim">2091</span></span> <span class="comment">//</span> <span class="data-box">0011 MC</span>
+                        </div>
+                        <div class="data-line">
+                            <span class="data-highlight">555553<span class="data-dim">0010G003</span></span> <span class="comment">// 0092091</span> <span class="comment">//</span> <span class="data-box">0011 MC</span>
+                        </div>
+                    </div>
+
+                    <div class="data-block">
+                        <div class="nested-data">
+                            <div class="data-line">A8DJ4</div>
+                            <div class="data-line">120800</div>
+                            <div class="data-line">434KR0</div>
+                            <div class="data-line">02G3KL</div>
+                        </div>
+                    </div>
+
+                    <div class="data-block">
+                        <div class="data-line">
+                            <span class="data-marker">•</span> AT <span class="data-marker">››</span> S
+                        </div>
+                        <div class="data-line">
+                            <span class="data-marker">•</span> AT <span class="data-marker">››</span> S
+                        </div>
+                        <div class="nested-data">
+                            <div class="system-check">
+                                <span class="data-box">SPD.AD 100</span> <span class="data-marker">››</span> 450
+                            </div>
+                            <div class="system-check">
+                                <span class="data-box">SPD.AD 200</span> <span class="data-marker">››</span> 200
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="data-block">
+                        <div class="data-line">SYS CHECK.INT <span class="data-highlight">45.0201100</span></div>
+                        <div class="data-line">SYS CHECK.INT <span class="data-highlight">45.0201100</span></div>
+                        <div class="nested-data">
+                            <div class="data-line">
+                                SV.ASL.A200 - 670.KSL_100 <span class="data-box">[100/400]</span>
+                            </div>
+                            <div class="data-line">
+                                SV.ASL.A200 - 500.KSL.230 <span class="data-box">[200/400]</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="data-block">
+                        <div class="data-line">SYS CHECK.INT 45.02</div>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN -->
+                <div class="data-column">
+                    <div class="data-block">
+                        <div class="data-line">
+                            <span class="hex-code">000:2<span class="data-dim">009:</span>50912094</span> <span class="comment">//</span> <span class="comment">//</span> <span class="comment">//</span>
+                        </div>
+                        <div class="data-line">
+                            <span class="hex-code">4912/1091//120</span>
+                        </div>
+                        <div class="data-line">
+                            <span class="hex-code data-dim">00001</span>
+                        </div>
+                    </div>
+
+                    <div class="data-block">
+                        <div class="data-line">
+                            <span class="data-marker">•</span>
+                        </div>
+                        <div class="nested-data">
+                            <div class="data-line">
+                                <span class="hex-code">00023009:<span class="data-highlight">0031270</span>:0001</span> - 0020
+                            </div>
+                            <div class="data-line">
+                                <span class="hex-code">3400-001000102040//120</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="data-block">
+                        <div class="data-line">
+                            <span class="data-marker">››</span>
+                        </div>
+                        <div class="nested-data">
+                            <div class="data-line">
+                                <span class="hex-code">0100002D020 KL 230 0PAP N15 01</span>
+                            </div>
+                            <div class="data-line">
+                                <span class="hex-code">01020</span>
+                            </div>
+                            <div class="data-line">
+                                <span class="hex-code">01200</span> KP
+                            </div>
+                            <div class="nested-data">
+                                <div class="data-line">FT <span class="comment">//</span> 002</div>
+                                <div class="data-line">FT <span class="comment">//</span> 002</div>
+                                <div class="data-line" style="margin-top: 12px;">SVS 00 00</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="data-block" style="margin-top: 48px;">
+                        <div class="data-line">
+                            <span class="data-marker">•</span> <span class="data-marker">•</span>
+                        </div>
+                        <div class="nested-data">
+                            <div class="data-box" style="margin-bottom: 8px;">AR</div>
+                            <div class="data-line">KR</div>
+                            <div class="data-line">01</div>
+                            <div class="data-line">AR</div>
+                            <div class="data-line">
+                                <span class="data-marker">•</span> <span class="data-marker">•</span> AT.5
+                            </div>
+                            <div class="data-line">
+                                <span class="data-marker">•</span> <span class="data-marker">•</span> AR.1
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="data-footer">
+                <div>SEK:450 - PROG.AR0 [45%]</div>
+                <div>ITS.</div>
+            </div>
+        </div>
+    </section>
+
     <div class="vertical-text">ACCESS</div>
     <div class="large-number">75</div>
 
     <script>
-        // Random grid cell activation
+        // Random grid animation
         setInterval(() => {
-            const cells = document.querySelectorAll('.data-cell, .grid-cell');
+            const cells = document.querySelectorAll('.grid-dot, .bottom-grid-cell');
             cells.forEach(cell => {
                 if (Math.random() > 0.9) {
                     cell.classList.toggle('active');
@@ -798,7 +918,7 @@
             });
         }, 2000);
 
-        // Terminate button interaction
+        // Terminate button
         document.querySelector('.terminate-btn').addEventListener('click', function() {
             this.textContent = 'TERMINATING...';
             setTimeout(() => {
@@ -813,7 +933,7 @@
             }, 4000);
         });
 
-        // Action buttons interaction
+        // Action buttons
         document.querySelectorAll('.action-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 this.style.borderColor = 'var(--color-accent)';
@@ -822,15 +942,6 @@
                 }, 300);
             });
         });
-
-        // Create additional pulse rings
-        const center = document.querySelector('.center-panel');
-        for (let i = 0; i < 3; i++) {
-            const ring = document.createElement('div');
-            ring.className = 'pulse-ring';
-            ring.style.animationDelay = `${i * 1}s`;
-            center.appendChild(ring);
-        }
     </script>
 
 </body>
