@@ -1009,56 +1009,7 @@
             100% { transform: translateY(200vh); }
         }
 
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           NAVIGATION
-           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
-        .nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            backdrop-filter: blur(12px) saturate(180%);
-            background: rgba(0, 0, 0, 0.8);
-            border-bottom: 1px solid var(--glass-border);
-        }
-
-        .nav-container {
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 16px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .nav-logo {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--color-accent);
-            letter-spacing: -1px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 32px;
-            align-items: center;
-        }
-
-        .nav-link {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            transition: color 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
-            color: var(--color-accent);
-        }
 
         /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
            DASHBOARD SECTION
@@ -1066,7 +1017,7 @@
 
         .dashboard-section {
             min-height: 100vh;
-            padding: 96px 24px 48px;
+            padding: 48px 24px 48px;
         }
 
         .dashboard-container {
@@ -1349,7 +1300,7 @@
 
         .contact-section {
             min-height: 100vh;
-            padding: 96px 24px 48px;
+            padding: 48px 24px 48px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1569,10 +1520,6 @@
                 grid-template-columns: 1fr;
             }
 
-            .nav-links {
-                display: none;
-            }
-
             .dashboard-title,
             .contact-title {
                 font-size: 32px;
@@ -1592,19 +1539,6 @@
 <body>
 
     <div class="scanline"></div>
-
-    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-         NAVIGATION
-         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
-    <nav class="nav">
-        <div class="nav-container">
-            <div class="nav-logo">TERMINAL.GLASS</div>
-            <div class="nav-links">
-                <a href="#dashboard" class="nav-link active">Dashboard</a>
-                <a href="#contact" class="nav-link">Contact</a>
-            </div>
-        </div>
-    </nav>
 
     <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
          DASHBOARD SECTION
@@ -1977,42 +1911,6 @@
                     btn.classList.remove('success');
                 }, 2000);
             }, 2000);
-        });
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // NAVIGATION
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                this.classList.add('active');
-                
-                const target = this.getAttribute('href');
-                document.querySelector(target).scrollIntoView({ behavior: 'smooth' });
-            });
-        });
-
-        // Update active nav on scroll
-        window.addEventListener('scroll', () => {
-            const sections = document.querySelectorAll('section');
-            const scrollPos = window.scrollY + 100;
-            
-            sections.forEach(section => {
-                const top = section.offsetTop;
-                const height = section.offsetHeight;
-                const id = section.getAttribute('id');
-                
-                if (scrollPos >= top && scrollPos < top + height) {
-                    document.querySelectorAll('.nav-link').forEach(link => {
-                        link.classList.remove('active');
-                        if (link.getAttribute('href') === '#' + id) {
-                            link.classList.add('active');
-                        }
-                    });
-                }
-            });
         });
     </script>
 
