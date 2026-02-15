@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TERMINAL.GLASS - Dual Interface</title>
+    <title>TERMINAL.GLASS - Complete Operations</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -38,9 +38,9 @@
             overflow-x: hidden;
         }
 
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           ELEGANT THIN NAVIGATION
-           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+        /* ═══════════════════════════════════════════════
+           NAVIGATION
+           ═══════════════════════════════════════════════ */
 
         .nav {
             position: fixed;
@@ -97,9 +97,9 @@
             border-bottom-color: var(--color-accent);
         }
 
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        /* ═══════════════════════════════════════════════
            SCANLINE EFFECT
-           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+           ═══════════════════════════════════════════════ */
 
         .scanline {
             position: fixed;
@@ -119,40 +119,98 @@
             100% { transform: translateY(200vh); }
         }
 
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           SECTION 1 - DATA INTERFACE
-           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+        /* ═══════════════════════════════════════════════
+           GLASS PANEL BASE
+           ═══════════════════════════════════════════════ */
 
-        .section-1 {
-            min-height: 100vh;
-            padding: 80px 24px 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .data-container {
-            max-width: 1000px;
-            width: 100%;
+        .glass-panel {
             backdrop-filter: blur(12px) saturate(180%);
             background: var(--glass-layer);
             border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            padding: 64px 48px;
+            border-radius: 2px;
+            padding: 24px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            position: relative;
         }
 
-        .top-indicators {
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 8px;
+            border-top: 2px solid var(--color-accent);
+            border-left: 2px solid var(--color-accent);
+        }
+
+        .glass-panel::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 8px;
+            height: 8px;
+            border-bottom: 2px solid var(--color-accent);
+            border-right: 2px solid var(--color-accent);
+        }
+
+        /* ═══════════════════════════════════════════════
+           SECTION 1 - TACTICAL INTERFACE
+           ═══════════════════════════════════════════════ */
+
+        .section {
+            min-height: 100vh;
+            padding: 80px 24px 48px;
+            position: relative;
+        }
+
+        .tactical-container {
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 32px;
+        }
+
+        /* LEFT PANEL */
+        .sequence-display {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 48px;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .seq-number {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .seq-indicator {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .seq-bar {
+            width: 24px;
+            height: 2px;
+            background: var(--color-accent);
+        }
+
+        .seq-icon {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--color-accent);
         }
 
         .status-dots {
             display: flex;
             gap: 8px;
+            margin-bottom: 24px;
         }
 
         .dot {
@@ -169,6 +227,229 @@
         @keyframes blink {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.3; }
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .action-btn {
+            width: 64px;
+            height: 64px;
+            border: 2px solid var(--glass-border);
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .action-btn::before,
+        .action-btn::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 2px;
+            background: var(--color-accent);
+        }
+
+        .action-btn::after {
+            transform: rotate(90deg);
+        }
+
+        .action-btn:hover {
+            border-color: var(--color-accent);
+            box-shadow: 0 0 20px var(--glass-glow);
+        }
+
+        .calling-status {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 24px;
+        }
+
+        .tech-lines {
+            font-size: 12px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 24px;
+        }
+
+        .next-line {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            margin: 24px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .next-line::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--glass-border), transparent);
+        }
+
+        .grid-dots {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .grid-dot {
+            width: 24px;
+            height: 24px;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            transition: all 0.3s;
+        }
+
+        .grid-dot.active {
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+            box-shadow: 0 0 8px var(--glass-glow);
+        }
+
+        /* CENTER PANEL */
+        .center-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .ascii-art {
+            font-size: 7px;
+            line-height: 1;
+            color: rgba(0, 255, 136, 0.3);
+            white-space: pre;
+            font-family: monospace;
+            margin-bottom: 48px;
+        }
+
+        .tech-display {
+            font-size: 13px;
+            line-height: 1.9;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* RIGHT PANEL */
+        .check-connect {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--color-accent);
+            text-align: right;
+            margin-bottom: 32px;
+        }
+
+        .info-line {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .info-label {
+            min-width: 100px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .info-dashes {
+            flex: 1;
+            height: 1px;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--glass-border) 0px,
+                var(--glass-border) 4px,
+                transparent 4px,
+                transparent 8px
+            );
+        }
+
+        .threat-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border: 1px solid var(--color-danger);
+            background: rgba(255, 0, 85, 0.1);
+            color: var(--color-danger);
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .terminate-btn {
+            width: 100%;
+            border: 2px solid var(--color-accent);
+            padding: 16px 32px;
+            background: transparent;
+            color: var(--color-accent);
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin: 24px 0;
+            text-transform: uppercase;
+        }
+
+        .terminate-btn:hover {
+            box-shadow: 0 0 30px var(--glass-glow);
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .check-items {
+            font-size: 12px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 16px;
+        }
+
+        .feedback-line {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            margin: 16px 0;
+        }
+
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 4px;
+            margin: 16px 0;
+        }
+
+        .bottom-grid-cell {
+            width: 16px;
+            height: 16px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s;
+        }
+
+        .bottom-grid-cell.active {
+            border-color: var(--color-accent);
+            box-shadow: 0 0 8px var(--glass-glow);
+        }
+
+        /* ═══════════════════════════════════════════════
+           SECTION 2 - DATA INTERFACE
+           ═══════════════════════════════════════════════ */
+
+        .data-container {
+            max-width: 1000px;
+            margin: 0 auto;
         }
 
         .data-grid {
@@ -262,871 +543,9 @@
             color: var(--color-dim);
         }
 
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           SECTION 2 - TACTICAL INTERFACE
-           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-        .section-2 {
-            min-height: 100vh;
-            padding: 80px 24px 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .tactical-container {
-            width: 100%;
-            max-width: 1600px;
-            display: grid;
-            grid-template-columns: 1fr 2fr 1fr;
-            gap: 32px;
-            padding: 24px;
-        }
-
-        /* LEFT PANEL */
-        .left-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 32px;
-        }
-
-        .sequence-display {
-            font-size: 16px;
-            color: rgba(255, 255, 255, 0.8);
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .seq-number {
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        .seq-indicator {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .seq-bar {
-            width: 24px;
-            height: 2px;
-            background: var(--color-accent);
-        }
-
-        .seq-icon {
-            width: 16px;
-            height: 16px;
-            border: 2px solid var(--color-accent);
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 16px;
-        }
-
-        .action-btn {
-            width: 64px;
-            height: 64px;
-            border: 2px solid var(--glass-border);
-            background: transparent;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-        }
-
-        .action-btn::before,
-        .action-btn::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 2px;
-            background: var(--color-accent);
-        }
-
-        .action-btn::after {
-            transform: rotate(90deg);
-        }
-
-        .action-btn:hover {
-            border-color: var(--color-accent);
-            box-shadow: 0 0 20px var(--glass-glow);
-        }
-
-        .calling-status {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.5);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .calling-status::before {
-            content: '';
-            width: 120px;
-            height: 1px;
-            background: var(--glass-border);
-        }
-
-        .tech-lines {
-            font-size: 12px;
-            line-height: 1.8;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .next-line {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.5);
-            margin-top: 24px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .next-line::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(90deg, var(--glass-border), transparent);
-        }
-
-        .grid-dots {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 8px;
-            margin-top: 24px;
-        }
-
-        .grid-dot {
-            width: 24px;
-            height: 24px;
-            border: 1px solid var(--glass-border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-        }
-
-        .grid-dot.active {
-            border-color: var(--color-accent);
-            color: var(--color-accent);
-            box-shadow: 0 0 8px var(--glass-glow);
-        }
-
-        /* CENTER PANEL */
-        .center-panel {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-
-        .ascii-art {
-            font-size: 7px;
-            line-height: 1;
-            color: rgba(0, 255, 136, 0.3);
-            white-space: pre;
-            font-family: monospace;
-            margin-bottom: 48px;
-        }
-
-        .tech-display {
-            font-size: 13px;
-            line-height: 1.9;
-            text-align: center;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        /* RIGHT PANEL */
-        .right-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .top-status-dots {
-            display: flex;
-            gap: 8px;
-            justify-content: flex-end;
-            margin-bottom: 16px;
-        }
-
-        .check-connect {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--color-accent);
-            text-align: right;
-            margin-bottom: 32px;
-        }
-
-        .info-line {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.7);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-        }
-
-        .info-label {
-            min-width: 100px;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .info-dashes {
-            flex: 1;
-            height: 1px;
-            background: repeating-linear-gradient(
-                90deg,
-                var(--glass-border) 0px,
-                var(--glass-border) 4px,
-                transparent 4px,
-                transparent 8px
-            );
-        }
-
-        .threat-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border: 1px solid var(--color-danger);
-            background: rgba(255, 0, 85, 0.1);
-            color: var(--color-danger);
-            font-size: 10px;
-            font-weight: 700;
-        }
-
-        .terminate-btn {
-            border: 2px solid var(--color-accent);
-            padding: 16px 32px;
-            background: transparent;
-            color: var(--color-accent);
-            font-family: var(--font-mono);
-            font-size: 14px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            margin: 24px 0;
-        }
-
-        .terminate-btn:hover {
-            box-shadow: 0 0 30px var(--glass-glow);
-            background: rgba(0, 255, 136, 0.1);
-        }
-
-        .check-items {
-            font-size: 12px;
-            line-height: 1.8;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .feedback-line {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.5);
-            margin-top: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .feedback-line::before {
-            content: '';
-            width: 32px;
-            height: 1px;
-            background: var(--glass-border);
-        }
-
-        .bottom-grid {
-            display: grid;
-            grid-template-columns: repeat(8, 1fr);
-            gap: 4px;
-            margin-top: 16px;
-        }
-
-        .bottom-grid-cell {
-            width: 16px;
-            height: 16px;
-            border: 1px solid var(--glass-border);
-        }
-
-        .bottom-grid-cell.active {
-            border-color: var(--color-accent);
-            box-shadow: 0 0 8px var(--glass-glow);
-        }
-
-        .vertical-text {
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            font-size: 10px;
-            letter-spacing: 2px;
-            color: rgba(255, 255, 255, 0.4);
-            text-transform: uppercase;
-            position: fixed;
-            right: 48px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .large-number {
-            font-size: 96px;
-            font-weight: 700;
-            color: rgba(0, 255, 136, 0.1);
-            position: fixed;
-            right: 64px;
-            bottom: 64px;
-        }
-
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           RESPONSIVE
-           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-        @media (max-width: 1400px) {
-            .tactical-container {
-                grid-template-columns: 1fr 1.5fr 1fr;
-                gap: 24px;
-            }
-
-            .large-number {
-                font-size: 64px;
-            }
-        }
-
-        @media (max-width: 1024px) {
-            .data-grid {
-                grid-template-columns: 1fr;
-                gap: 32px;
-            }
-
-            .tactical-container {
-                grid-template-columns: 1fr;
-            }
-
-            .vertical-text {
-                display: none;
-            }
-
-            .large-number {
-                font-size: 48px;
-                bottom: 32px;
-                right: 32px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .data-container {
-                padding: 32px 24px;
-            }
-
-            .tactical-container {
-                padding: 16px;
-            }
-
-            .nav-links {
-                gap: 16px;
-            }
-
-            .nav-link {
-                font-size: 11px;
-                padding: 4px 6px;
-            }
-
-            .nav-logo {
-                font-size: 12px;
-            }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="scanline"></div>
-
-    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-         ELEGANT NAVIGATION
-         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
-    <nav class="nav">
-        <div class="nav-container">
-            <div class="nav-logo">Terminal.Glass</div>
-            <div class="nav-links">
-                <a href="#tactical" class="nav-link active">Tactical</a>
-                <a href="#data" class="nav-link">Data</a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-         SECTION 1 - TACTICAL INTERFACE
-         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
-    <section class="section-2" id="tactical">
-        <div class="tactical-container">
-            <!-- LEFT PANEL -->
-            <div class="left-panel">
-                <div class="sequence-display">
-                    <span class="seq-number">002</span>
-                    <div class="seq-indicator">
-                        <span class="seq-bar"></span>
-                        <div class="seq-icon"></div>
-                        <span class="seq-bar"></span>
-                    </div>
-                </div>
-
-                <div class="status-dots">
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                </div>
-
-                <div class="action-buttons">
-                    <button class="action-btn"></button>
-                    <button class="action-btn"></button>
-                    <button class="action-btn"></button>
-                </div>
-
-                <div class="calling-status">CALLING...</div>
-
-                <div class="sequence-display">
-                    <span class="seq-number">001</span>
-                    <div class="seq-indicator">
-                        <span class="seq-bar"></span>
-                        <div class="seq-icon"></div>
-                        <span class="seq-bar"></span>
-                    </div>
-                </div>
-
-                <div class="tech-lines">
-                    <div>M.LEVATOR VELIPALATINI MM CONSTRICTOPES PHARYN</div>
-                    <div>CONNECT -------- N.LARYNGEUS SUPERIOR CHECK</div>
-                    <div>RAMUS EXTERNUS CHECK --------------------------</div>
-                </div>
-
-                <div class="next-line">NEXT</div>
-
-                <div class="grid-dots">
-                    <div class="grid-dot">■</div>
-                    <div class="grid-dot">■</div>
-                    <div class="grid-dot active">◼</div>
-                    <div class="grid-dot active">◼</div>
-                    <div class="grid-dot">◻</div>
-                    <div class="grid-dot">■</div>
-                    <div class="grid-dot">■</div>
-                    <div class="grid-dot">■</div>
-                </div>
-
-                <div class="tech-lines" style="margin-top: 32px;">
-                    <div>PROPER VOLTAGE RAMIPHARYNGEI CALLING</div>
-                    <div>N.LARYNGEUS SUPERIOR CALL RAMI PHARYNGEI CHECK</div>
-                    <div style="height: 16px;"></div>
-                    <div>PLEXUS PHARYNGEUS CALLING ------------------</div>
-                    <div>PLEXUS PHARYNGEUS CHECK --------------------</div>
-                </div>
-            </div>
-
-            <!-- CENTER PANEL -->
-            <div class="center-panel">
-                <div class="ascii-art">████████████████
-████        ████
-    ████████
-    ████████
-████        ████
-████████████████</div>
-
-                <div class="tech-display">
-                    <div>NEURAL PATHWAY SYNCHRONIZATION INITIATED</div>
-                    <div>CORTICAL INTERFACE PROTOCOL v2.7.4</div>
-                    <div>QUANTUM ENCRYPTION: ACTIVE</div>
-                </div>
-            </div>
-
-            <!-- RIGHT PANEL -->
-            <div class="right-panel">
-                <div class="top-status-dots">
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                </div>
-
-                <div class="check-connect">CHECK CONNECT</div>
-
-                <div class="ascii-art" style="margin-bottom: 24px;">████ ████████
-████ ████████
-████ ████
-████ ████
-████████████████
-████████████████</div>
-
-                <div class="info-line">
-                    <span class="info-label">DISTRICT</span>
-                    <span class="info-dashes"></span>
-                    <span>HOTEL MERCURY - TOKYO, JAPAN</span>
-                </div>
-
-                <div class="info-line">
-                    <span class="info-label">GPS</span>
-                    <span class="info-dashes"></span>
-                    <span>35.652832, 139.839478</span>
-                </div>
-
-                <div class="info-line">
-                    <span class="info-label">STATUS</span>
-                    <span class="info-dashes"></span>
-                    <span>ONGOING OPERATION</span>
-                </div>
-
-                <div class="info-line">
-                    <span class="info-label">THREAT LEVEL</span>
-                    <span class="info-dashes"></span>
-                    <span class="threat-badge">HIGH</span>
-                </div>
-
-                <div class="info-line" style="margin-top: 24px;">
-                    <span class="info-dashes"></span>
-                    <span>NCI AMBIGUUS CHECK - DORSALISN. VAGI</span>
-                </div>
-
-                <div class="info-line">
-                    <span class="info-dashes"></span>
-                    <span>NO REJECTION</span>
-                </div>
-
-                <button class="terminate-btn">TERMINATE</button>
-
-                <div class="check-items">
-                    <div>---------------- GANGLION SUPERIUS CALLER</div>
-                    <div>---------------- GANGLION SUPERIUS CHECK</div>
-                </div>
-
-                <div class="feedback-line">FEEDBACK TO BASE</div>
-
-                <div class="bottom-grid">
-                    <div class="bottom-grid-cell"></div>
-                    <div class="bottom-grid-cell"></div>
-                    <div class="bottom-grid-cell"></div>
-                    <div class="bottom-grid-cell"></div>
-                    <div class="bottom-grid-cell"></div>
-                    <div class="bottom-grid-cell"></div>
-                    <div class="bottom-grid-cell active"></div>
-                    <div class="bottom-grid-cell active"></div>
-                </div>
-
-                <div class="ascii-art" style="margin-top: 24px;">████████████████
-████        ████
-    ████████
-    ████████
-████        ████
-████████████████</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-         SECTION 2 - DATA INTERFACE
-         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
-    <section class="section-1" id="data">
-        <div class="data-container">
-            <div class="top-indicators">
-                <div class="status-dots">
-                    <div class="dot"></div>
-                </div>
-                <div class="status-dots">
-                    <div class="dot"></div>
-                </div>
-            </div>
-
-            <div class="data-grid">
-                <!-- LEFT COLUMN -->
-                <div class="data-column">
-                    <div class="data-block">
-                        <div class="data-line">
-                            <span class="data-marker">•</span>
-                            231K - 10.003 <span class="comment">// 0092091</span> 34018A 230ALU 12RKSJ
-                        </div>
-                        <div class="data-line" style="padding-left: 16px;">
-                            455.KL0.530 - 0003 <span class="comment">// 0092091</span> <span class="comment">//</span> <span class="data-box active">0011 MC</span>
-                        </div>
-                    </div>
-
-                    <div class="data-block">
-                        <div class="data-line">
-                            <span class="data-highlight">5555530010G003</span> <span class="comment">// 0092091</span> <span class="comment">//</span> <span class="data-box active">0011 MC</span>
-                        </div>
-                        <div class="data-line">
-                            <span class="data-highlight">5555530010G003</span> <span class="comment">// 009<span class="data-dim">2091</span></span> <span class="comment">//</span> <span class="data-box">0011 MC</span>
-                        </div>
-                        <div class="data-line">
-                            <span class="data-highlight">555553<span class="data-dim">0010G003</span></span> <span class="comment">// 0092091</span> <span class="comment">//</span> <span class="data-box">0011 MC</span>
-                        </div>
-                    </div>
-
-                    <div class="data-block">
-                        <div class="nested-data">
-                            <div class="data-line">A8DJ4</div>
-                            <div class="data-line">120800</div>
-                            <div class="data-line">434KR0</div>
-                            <div class="data-line">02G3KL</div>
-                        </div>
-                    </div>
-
-                    <div class="data-block">
-                        <div class="data-line">
-                            <span class="data-marker">•</span> AT <span class="data-marker">››</span> S
-                        </div>
-                        <div class="data-line">
-                            <span class="data-marker">•</span> AT <span class="data-marker">››</span> S
-                        </div>
-                        <div class="nested-data">
-                            <div class="system-check">
-                                <span class="data-box">SPD.AD 100</span> <span class="data-marker">››</span> 450
-                            </div>
-                            <div class="system-check">
-                                <span class="data-box">SPD.AD 200</span> <span class="data-marker">››</span> 200
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="data-block">
-                        <div class="data-line">SYS CHECK.INT <span class="data-highlight">45.0201100</span></div>
-                        <div class="data-line">SYS CHECK.INT <span class="data-highlight">45.0201100</span></div>
-                        <div class="nested-data">
-                            <div class="data-line">
-                                SV.ASL.A200 - 670.KSL_100 <span class="data-box">[100/400]</span>
-                            </div>
-                            <div class="data-line">
-                                SV.ASL.A200 - 500.KSL.230 <span class="data-box">[200/400]</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="data-block">
-                        <div class="data-line">SYS CHECK.INT 45.02</div>
-                    </div>
-                </div>
-
-                <!-- RIGHT COLUMN -->
-                <div class="data-column">
-                    <div class="data-block">
-                        <div class="data-line">
-                            <span class="hex-code">000:2<span class="data-dim">009:</span>50912094</span> <span class="comment">//</span> <span class="comment">//</span> <span class="comment">//</span>
-                        </div>
-                        <div class="data-line">
-                            <span class="hex-code">4912/1091//120</span>
-                        </div>
-                        <div class="data-line">
-                            <span class="hex-code data-dim">00001</span>
-                        </div>
-                    </div>
-
-                    <div class="data-block">
-                        <div class="data-line">
-                            <span class="data-marker">•</span>
-                        </div>
-                        <div class="nested-data">
-                            <div class="data-line">
-                                <span class="hex-code">00023009:<span class="data-highlight">0031270</span>:0001</span> - 0020
-                            </div>
-                            <div class="data-line">
-                                <span class="hex-code">3400-001000102040//120</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="data-block">
-                        <div class="data-line">
-                            <span class="data-marker">››</span>
-                        </div>
-                        <div class="nested-data">
-                            <div class="data-line">
-                                <span class="hex-code">0100002D020 KL 230 0PAP N15 01</span>
-                            </div>
-                            <div class="data-line">
-                                <span class="hex-code">01020</span>
-                            </div>
-                            <div class="data-line">
-                                <span class="hex-code">01200</span> KP
-                            </div>
-                            <div class="nested-data">
-                                <div class="data-line">FT <span class="comment">//</span> 002</div>
-                                <div class="data-line">FT <span class="comment">//</span> 002</div>
-                                <div class="data-line" style="margin-top: 12px;">SVS 00 00</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="data-block" style="margin-top: 48px;">
-                        <div class="data-line">
-                            <span class="data-marker">•</span> <span class="data-marker">•</span>
-                        </div>
-                        <div class="nested-data">
-                            <div class="data-box" style="margin-bottom: 8px;">AR</div>
-                            <div class="data-line">KR</div>
-                            <div class="data-line">01</div>
-                            <div class="data-line">AR</div>
-                            <div class="data-line">
-                                <span class="data-marker">•</span> <span class="data-marker">•</span> AT.5
-                            </div>
-                            <div class="data-line">
-                                <span class="data-marker">•</span> <span class="data-marker">•</span> AR.1
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="data-footer">
-                <div>SEK:450 - PROG.AR0 [45%]</div>
-                <div>ITS.</div>
-            </div>
-        </div>
-    </section>
-
-    <div class="vertical-text">ACCESS</div>
-    <div class="large-number">75</div>
-
-    <script>
-        // Random grid animation
-        setInterval(() => {
-            const cells = document.querySelectorAll('.grid-dot, .bottom-grid-cell');
-            cells.forEach(cell => {
-                if (Math.random() > 0.9) {
-                    cell.classList.toggle('active');
-                }
-            });
-        }, 2000);
-
-        // Terminate button
-        document.querySelector('.terminate-btn').addEventListener('click', function() {
-            this.textContent = 'TERMINATING...';
-            setTimeout(() => {
-                this.textContent = 'TERMINATED';
-                this.style.borderColor = 'var(--color-danger)';
-                this.style.color = 'var(--color-danger)';
-            }, 1500);
-            setTimeout(() => {
-                this.textContent = 'TERMINATE';
-                this.style.borderColor = 'var(--color-accent)';
-                this.style.color = 'var(--color-accent)';
-            }, 4000);
-        });
-
-        // Action buttons
-        document.querySelectorAll('.action-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                this.style.borderColor = 'var(--color-accent)';
-                setTimeout(() => {
-                    this.style.borderColor = 'var(--glass-border)';
-                }, 300);
-            });
-        });
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // NAVIGATION
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                this.classList.add('active');
-                
-                const target = this.getAttribute('href');
-                document.querySelector(target).scrollIntoView({ behavior: 'smooth' });
-            });
-        });
-
-        // Update active nav on scroll
-        window.addEventListener('scroll', () => {
-            const sections = document.querySelectorAll('section');
-            const scrollPos = window.scrollY + 100;
-            
-            sections.forEach(section => {
-                const top = section.offsetTop;
-                const height = section.offsetHeight;
-                const id = section.getAttribute('id');
-                
-                if (scrollPos >= top && scrollPos < top + height) {
-                    document.querySelectorAll('.nav-link').forEach(link => {
-                        link.classList.remove('active');
-                        if (link.getAttribute('href') === '#' + id) {
-                            link.classList.add('active');
-                        }
-                    });
-                }
-            });
-        });
-    </script>
-
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TERMINAL.GLASS - Intelligence Operations</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --color-bg: #000000;
-            --color-surface: #0A0A0A;
-            --color-text: #FFFFFF;
-            --color-accent: #00FF88;
-            --color-danger: #FF0055;
-            --color-dim: rgba(255, 255, 255, 0.3);
-            --glass-layer: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(0, 255, 136, 0.2);
-            --glass-glow: rgba(0, 255, 136, 0.4);
-            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-        }
-
-        body {
-            font-family: var(--font-mono);
-            background: var(--color-bg);
-            color: var(--color-text);
-            overflow-x: hidden;
-        }
-
-        .scanline {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(180deg, transparent, var(--color-accent), transparent);
-            opacity: 0.2;
-            animation: scanline 8s linear infinite;
-            pointer-events: none;
-            z-index: 9999;
-        }
-
-        @keyframes scanline {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100vh); }
-        }
-
-        /* INTELLIGENCE SECTION */
-        .intelligence-section {
-            min-height: 100vh;
-            padding: 48px 24px;
-            position: relative;
-        }
+        /* ═══════════════════════════════════════════════
+           SECTION 3 - INTELLIGENCE INTERFACE
+           ═══════════════════════════════════════════════ */
 
         .intel-container {
             max-width: 1800px;
@@ -1134,48 +553,6 @@
             display: grid;
             grid-template-columns: 300px 1fr 400px;
             gap: 24px;
-            height: calc(100vh - 96px);
-        }
-
-        /* GLASS PANEL BASE */
-        .glass-panel {
-            backdrop-filter: blur(12px) saturate(180%);
-            background: var(--glass-layer);
-            border: 1px solid var(--glass-border);
-            border-radius: 2px;
-            padding: 24px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-            position: relative;
-        }
-
-        .glass-panel::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 8px;
-            height: 8px;
-            border-top: 2px solid var(--color-accent);
-            border-left: 2px solid var(--color-accent);
-        }
-
-        .glass-panel::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 8px;
-            height: 8px;
-            border-bottom: 2px solid var(--color-accent);
-            border-right: 2px solid var(--color-accent);
-        }
-
-        /* LEFT PANEL - AGENT DETAILS */
-        .left-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-            overflow-y: auto;
         }
 
         .panel-title {
@@ -1248,24 +625,11 @@
             gap: 8px;
         }
 
-        .info-label {
-            color: var(--color-dim);
-            min-width: 80px;
-        }
-
-        .info-value {
-            color: var(--color-text);
-        }
-
-        .activity-stats {
-            margin-top: 32px;
-        }
-
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 16px;
-            margin-bottom: 16px;
+            margin: 16px 0;
         }
 
         .stat-item {
@@ -1330,494 +694,92 @@
             opacity: 1;
         }
 
-        /* CENTER PANEL - HUD INTERFACE */
-        .center-panel {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .map-container {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .hud-system {
-            width: 500px;
-            height: 500px;
-            position: relative;
-        }
-
-        /* Main Circle */
-        .hud-circle {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 300px;
-            height: 300px;
-            border: 2px solid var(--color-accent);
-            border-radius: 50%;
-            animation: pulse-circle 3s ease-in-out infinite;
-        }
-
-        @keyframes pulse-circle {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 1; box-shadow: 0 0 30px var(--glass-glow); }
-        }
-
-        /* Center Content */
-        .hud-center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            width: 200px;
-        }
-
-        .hud-icon {
-            font-size: 32px;
-            margin-bottom: 16px;
-            color: var(--color-accent);
-        }
-
-        .hud-title {
-            font-size: 12px;
-            color: var(--color-text);
-            line-height: 1.4;
-            margin-bottom: 8px;
-        }
-
-        .hud-subtitle {
-            font-size: 9px;
-            color: var(--color-dim);
-        }
-
-        /* Rotating Orbital Ring */
-        .orbital-ring {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 400px;
-            height: 400px;
-            border: 1px solid var(--glass-border);
-            border-radius: 50%;
-            animation: rotate-orbit 20s linear infinite;
-        }
-
-        @keyframes rotate-orbit {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-
-        /* Orbital Elements */
-        .orbital-element {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: var(--color-accent);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--glass-glow);
-        }
-
-        .orbital-element:nth-child(1) {
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .orbital-element:nth-child(2) {
-            top: 50%;
-            right: 0;
-            transform: translateY(-50%);
-        }
-
-        .orbital-element:nth-child(3) {
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .orbital-element:nth-child(4) {
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-        }
-
-        /* Technical Lines */
-        .tech-line {
-            position: absolute;
-            background: var(--glass-border);
-            opacity: 0.5;
-        }
-
-        .tech-line.horizontal {
-            height: 1px;
-            width: 150px;
-        }
-
-        .tech-line.vertical {
-            width: 1px;
-            height: 150px;
-        }
-
-        .tech-line.line-1 {
-            top: 50%;
-            right: 60%;
-            transform: rotate(-30deg);
-        }
-
-        .tech-line.line-2 {
-            top: 30%;
-            right: 50%;
-            width: 100px;
-        }
-
-        .tech-line.line-3 {
-            top: 50%;
-            left: 60%;
-            transform: rotate(30deg);
-        }
-
-        .tech-line.line-4 {
-            bottom: 30%;
-            right: 50%;
-            width: 120px;
-            transform: rotate(-15deg);
-        }
-
-        /* Data Points */
-        .data-point {
-            position: absolute;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 10px;
-            color: var(--color-text);
-            padding: 4px 8px;
-            border: 1px solid var(--glass-border);
-            background: rgba(0, 0, 0, 0.7);
-            white-space: nowrap;
-        }
-
-        .data-point::before {
-            content: '';
-            width: 4px;
-            height: 4px;
-            background: var(--color-accent);
-            border-radius: 50%;
-            animation: blink 2s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
-        .data-point.point-1 {
-            top: 15%;
-            right: 25%;
-        }
-
-        .data-point.point-2 {
-            top: 40%;
-            right: 10%;
-        }
-
-        .data-point.point-3 {
-            bottom: 30%;
-            right: 20%;
-        }
-
-        .data-point.point-4 {
-            bottom: 15%;
-            left: 20%;
-        }
-
-        .data-point.point-5 {
-            top: 25%;
-            left: 15%;
-        }
-
-        /* Corner Brackets */
-        .corner-bracket {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            border: 2px solid var(--color-accent);
-        }
-
-        .corner-bracket.top-left {
-            top: 10%;
-            left: 10%;
-            border-right: none;
-            border-bottom: none;
-        }
-
-        .corner-bracket.top-right {
-            top: 10%;
-            right: 10%;
-            border-left: none;
-            border-bottom: none;
-        }
-
-        .corner-bracket.bottom-left {
-            bottom: 10%;
-            left: 10%;
-            border-right: none;
-            border-top: none;
-        }
-
-        .corner-bracket.bottom-right {
-            bottom: 10%;
-            right: 10%;
-            border-left: none;
-            border-top: none;
-        }
-
-        /* Scale Marks */
-        .scale-marks {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 350px;
-            height: 350px;
-        }
-
-        .scale-mark {
-            position: absolute;
-            width: 2px;
-            height: 10px;
-            background: var(--glass-border);
-            transform-origin: center;
-        }
-
-        /* Crosshair */
-        .crosshair {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-        }
-
-        .crosshair-h {
-            position: absolute;
-            top: 0;
-            left: -25px;
-            width: 50px;
-            height: 1px;
-            background: var(--color-accent);
-        }
-
-        .crosshair-v {
-            position: absolute;
-            top: -25px;
-            left: 0;
-            width: 1px;
-            height: 50px;
-            background: var(--color-accent);
-        }
-
-        /* Scanning Line */
-        .scan-line {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 150px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
-            transform-origin: left center;
-            animation: scan-rotate 4s linear infinite;
-            opacity: 0.6;
-        }
-
-        @keyframes scan-rotate {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-
-        /* Target Markers */
-        .target-marker {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--color-danger);
-            border-radius: 50%;
-            cursor: pointer;
-            animation: target-pulse 2s infinite;
-        }
-
-        .target-marker::before,
-        .target-marker::after {
-            content: '';
-            position: absolute;
-            background: var(--color-danger);
-        }
-
-        .target-marker::before {
-            top: 50%;
-            left: -6px;
-            right: -6px;
-            height: 1px;
-            transform: translateY(-50%);
-        }
-
-        .target-marker::after {
-            top: -6px;
-            bottom: -6px;
-            left: 50%;
-            width: 1px;
-            transform: translateX(-50%);
-        }
-
-        @keyframes target-pulse {
-            0%, 100% { 
-                box-shadow: 0 0 0 0 var(--color-danger);
-                opacity: 1;
-            }
-            50% { 
-                box-shadow: 0 0 20px var(--color-danger);
-                opacity: 0.8;
-            }
-        }
-
-        .target-marker.marker-1 {
-            top: 35%;
-            left: 30%;
-        }
-
-        .target-marker.marker-2 {
-            top: 60%;
-            right: 25%;
-        }
-
-        .target-marker.marker-3 {
-            top: 25%;
-            right: 35%;
-        }
-
-        /* Rotating Dashed Circle */
-        .dashed-circle {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 250px;
-            height: 250px;
-            border: 1px dashed var(--glass-border);
-            border-radius: 50%;
-            animation: rotate-orbit-reverse 15s linear infinite;
-        }
-
-        @keyframes rotate-orbit-reverse {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(-360deg); }
-        }
-
-        /* Info Box */
-        .hud-info-box {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 12px 24px;
-            border: 1px solid var(--glass-border);
-            background: rgba(0, 0, 0, 0.8);
-            font-size: 11px;
-            color: var(--color-accent);
-            letter-spacing: 2px;
-        }
-
-        .operation-info {
-            position: absolute;
-            top: 24px;
-            left: 24px;
-            max-width: 300px;
-        }
-
-        .operation-location {
+        /* ENCRYPTED CHAT */
+        .panel-header {
             font-size: 14px;
-            color: var(--color-danger);
-            font-weight: 700;
-            margin-bottom: 8px;
             text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--color-accent);
+            margin-bottom: 24px;
+            font-weight: 700;
         }
 
-        .operation-desc {
-            font-size: 11px;
-            line-height: 1.6;
-            color: rgba(255, 255, 255, 0.7);
+        .sphere-container {
+            display: flex;
+            justify-content: center;
+            margin: 32px 0;
         }
 
-        .mini-map {
-            position: absolute;
-            bottom: 24px;
-            right: 24px;
+        .wire-sphere {
             width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 1px solid var(--glass-border);
+            position: relative;
+            animation: rotate-sphere 20s linear infinite;
+            box-shadow: 0 0 20px var(--glass-glow);
+        }
+
+        .wire-sphere::before,
+        .wire-sphere::after {
+            content: '';
+            position: absolute;
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+        }
+
+        .wire-sphere::before {
+            width: 100%;
+            height: 50%;
+            top: 25%;
+            left: 0;
+        }
+
+        .wire-sphere::after {
+            width: 50%;
+            height: 100%;
+            left: 25%;
+            top: 0;
+        }
+
+        @keyframes rotate-sphere {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .chat-log {
+            background: var(--color-surface);
             padding: 16px;
-            backdrop-filter: blur(12px);
-            background: var(--glass-layer);
+            font-size: 11px;
+            line-height: 1.8;
+            max-height: 400px;
+            overflow-y: auto;
             border: 1px solid var(--glass-border);
             border-radius: 2px;
         }
 
-        .mini-map-title {
-            font-size: 10px;
-            text-transform: uppercase;
+        .chat-timestamp {
             color: var(--color-accent);
+            margin-top: 16px;
             margin-bottom: 8px;
+            font-weight: 700;
         }
 
-        .mini-map-region {
-            width: 100%;
-            height: 80px;
-            border: 1px solid var(--glass-border);
-            background: var(--color-surface);
-            position: relative;
-            overflow: hidden;
+        .chat-timestamp:first-child {
+            margin-top: 0;
         }
 
-        .timeline {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 40px;
-            display: flex;
-            align-items: flex-end;
-            gap: 2px;
-            padding: 8px;
-            background: rgba(0, 0, 0, 0.5);
+        .chat-line {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 4px;
         }
 
-        .timeline-bar {
-            flex: 1;
-            background: var(--glass-border);
-            transition: height 0.3s;
-            cursor: pointer;
+        .chat-status {
+            color: var(--color-accent);
+            margin-bottom: 4px;
         }
 
-        .timeline-bar:hover {
-            background: var(--color-accent);
-        }
-
-        .timeline-label {
-            font-size: 9px;
-            color: var(--color-dim);
-            margin-top: 4px;
-            text-align: center;
-        }
-
-        /* RIGHT PANEL - OPERATIONS LIST */
-        .right-panel {
-            overflow-y: auto;
-        }
-
+        /* OPERATIONS LIST */
         .ops-header {
             display: flex;
             justify-content: space-between;
@@ -1840,6 +802,7 @@
         .time-filter {
             display: flex;
             gap: 8px;
+            margin-bottom: 16px;
         }
 
         .filter-btn {
@@ -1851,12 +814,17 @@
             font-size: 10px;
             cursor: pointer;
             transition: all 0.3s;
+            border-radius: 2px;
         }
 
         .filter-btn.active {
             border-color: var(--color-accent);
             color: var(--color-accent);
             background: rgba(0, 255, 136, 0.1);
+        }
+
+        .filter-btn:hover {
+            border-color: var(--color-accent);
         }
 
         .ops-subtitle {
@@ -1890,6 +858,7 @@
         .operation-card:hover {
             border-color: var(--color-accent);
             background: rgba(0, 255, 136, 0.05);
+            transform: translateX(8px);
         }
 
         .operation-card:hover::before {
@@ -1925,30 +894,75 @@
             cursor: pointer;
             transition: all 0.3s;
             text-transform: uppercase;
+            border-radius: 2px;
         }
 
         .op-btn:hover {
             border-color: var(--color-accent);
             color: var(--color-accent);
+            background: rgba(0, 255, 136, 0.05);
         }
 
-        /* RESPONSIVE */
+        /* ═══════════════════════════════════════════════
+           SCROLLBAR
+           ═══════════════════════════════════════════════ */
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--color-surface);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--glass-border);
+            border-radius: 2px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--color-accent);
+        }
+
+        /* ═══════════════════════════════════════════════
+           RESPONSIVE
+           ═══════════════════════════════════════════════ */
+
         @media (max-width: 1400px) {
+            .tactical-container {
+                grid-template-columns: 1fr 1.5fr 1fr;
+                gap: 24px;
+            }
+
             .intel-container {
                 grid-template-columns: 280px 1fr 350px;
             }
         }
 
         @media (max-width: 1024px) {
-            .intel-container {
+            .data-grid {
                 grid-template-columns: 1fr;
-                grid-template-rows: auto 500px auto;
-                height: auto;
+                gap: 32px;
             }
 
-            .world-map {
-                width: 90%;
-                height: 90%;
+            .tactical-container,
+            .intel-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 16px;
+            }
+
+            .nav-link {
+                font-size: 11px;
+                padding: 4px 6px;
+            }
+
+            .nav-logo {
+                font-size: 12px;
             }
         }
     </style>
@@ -1957,37 +971,362 @@
 
     <div class="scanline"></div>
 
-    <section class="intelligence-section">
-        <div class="intel-container">
-            
-            <!-- LEFT PANEL - AGENT DETAILS -->
-            <div class="glass-panel left-panel">
-                <div>
-                    <div class="panel-title">Agent Details</div>
-                    <div class="panel-subtitle">Detailed dossier of intelligence personnel</div>
-                    
-                    <div class="agent-photo">👤</div>
-                    
-                    <div class="agent-id">AGENT 009X3312</div>
-                    
-                    <div class="agent-info">
-                        <div class="info-row">
-                            <span class="info-label">» AGE</span>
-                            <span class="info-value">: null</span>
+    <!-- ═══════════════════════════════════════════════
+         NAVIGATION
+         ═══════════════════════════════════════════════ -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">Terminal.Glass</div>
+            <div class="nav-links">
+                <a href="#tactical" class="nav-link active">Tactical</a>
+                <a href="#data" class="nav-link">Data</a>
+                <a href="#intelligence" class="nav-link">Intelligence</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ═══════════════════════════════════════════════
+         SECTION 1 - TACTICAL INTERFACE
+         ═══════════════════════════════════════════════ -->
+    <section class="section" id="tactical">
+        <div class="tactical-container">
+            <!-- LEFT PANEL -->
+            <div class="glass-panel">
+                <div class="sequence-display">
+                    <span class="seq-number">002</span>
+                    <div class="seq-indicator">
+                        <span class="seq-bar"></span>
+                        <div class="seq-icon"></div>
+                        <span class="seq-bar"></span>
+                    </div>
+                </div>
+
+                <div class="status-dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn"></button>
+                    <button class="action-btn"></button>
+                    <button class="action-btn"></button>
+                </div>
+
+                <div class="calling-status">CALLING...</div>
+
+                <div class="sequence-display">
+                    <span class="seq-number">001</span>
+                    <div class="seq-indicator">
+                        <span class="seq-bar"></span>
+                        <div class="seq-icon"></div>
+                        <span class="seq-bar"></span>
+                    </div>
+                </div>
+
+                <div class="tech-lines">
+                    <div>M.LEVATOR VELIPALATINI MM CONSTRICTOPES PHARYN</div>
+                    <div>CONNECT -------- N.LARYNGEUS SUPERIOR CHECK</div>
+                    <div>RAMUS EXTERNUS CHECK --------------------------</div>
+                </div>
+
+                <div class="next-line">NEXT</div>
+
+                <div class="grid-dots">
+                    <div class="grid-dot">■</div>
+                    <div class="grid-dot">■</div>
+                    <div class="grid-dot active">◼</div>
+                    <div class="grid-dot active">◼</div>
+                    <div class="grid-dot">◻</div>
+                    <div class="grid-dot">■</div>
+                    <div class="grid-dot">■</div>
+                    <div class="grid-dot">■</div>
+                </div>
+
+                <div class="tech-lines">
+                    <div>PROPER VOLTAGE RAMIPHARYNGEI CALLING</div>
+                    <div>N.LARYNGEUS SUPERIOR CALL RAMI PHARYNGEI CHECK</div>
+                    <div style="height: 16px;"></div>
+                    <div>PLEXUS PHARYNGEUS CALLING ------------------</div>
+                    <div>PLEXUS PHARYNGEUS CHECK --------------------</div>
+                </div>
+            </div>
+
+            <!-- CENTER PANEL -->
+            <div class="glass-panel center-panel">
+                <div class="ascii-art">████████████████
+████        ████
+    ████████
+    ████████
+████        ████
+████████████████</div>
+
+                <div class="tech-display">
+                    <div>NEURAL PATHWAY SYNCHRONIZATION INITIATED</div>
+                    <div>CORTICAL INTERFACE PROTOCOL v2.7.4</div>
+                    <div>QUANTUM ENCRYPTION: ACTIVE</div>
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL -->
+            <div class="glass-panel">
+                <div class="status-dots" style="justify-content: flex-end;">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+
+                <div class="check-connect">CHECK CONNECT</div>
+
+                <div class="ascii-art" style="margin-bottom: 24px;">████ ████████
+████ ████████
+████ ████
+████ ████
+████████████████
+████████████████</div>
+
+                <div class="info-line">
+                    <span class="info-label">DISTRICT</span>
+                    <span class="info-dashes"></span>
+                    <span>TOKYO, JAPAN</span>
+                </div>
+
+                <div class="info-line">
+                    <span class="info-label">GPS</span>
+                    <span class="info-dashes"></span>
+                    <span>35.652832, 139.839478</span>
+                </div>
+
+                <div class="info-line">
+                    <span class="info-label">STATUS</span>
+                    <span class="info-dashes"></span>
+                    <span>ONGOING OPERATION</span>
+                </div>
+
+                <div class="info-line">
+                    <span class="info-label">THREAT</span>
+                    <span class="info-dashes"></span>
+                    <span class="threat-badge">HIGH</span>
+                </div>
+
+                <div class="info-line" style="margin-top: 24px;">
+                    <span class="info-dashes"></span>
+                    <span>NCI AMBIGUUS CHECK</span>
+                </div>
+
+                <button class="terminate-btn">TERMINATE</button>
+
+                <div class="check-items">
+                    <div>---------------- GANGLION SUPERIUS CALLER</div>
+                    <div>---------------- GANGLION SUPERIUS CHECK</div>
+                </div>
+
+                <div class="feedback-line">FEEDBACK TO BASE</div>
+
+                <div class="bottom-grid">
+                    <div class="bottom-grid-cell"></div>
+                    <div class="bottom-grid-cell"></div>
+                    <div class="bottom-grid-cell"></div>
+                    <div class="bottom-grid-cell"></div>
+                    <div class="bottom-grid-cell"></div>
+                    <div class="bottom-grid-cell"></div>
+                    <div class="bottom-grid-cell active"></div>
+                    <div class="bottom-grid-cell active"></div>
+                </div>
+
+                <div class="ascii-art" style="margin-top: 24px;">████████████████
+████        ████
+    ████████
+    ████████
+████        ████
+████████████████</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         SECTION 2 - DATA INTERFACE
+         ═══════════════════════════════════════════════ -->
+    <section class="section" id="data">
+        <div class="glass-panel data-container">
+            <div class="status-dots" style="justify-content: space-between; margin-bottom: 48px;">
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+
+            <div class="data-grid">
+                <!-- LEFT COLUMN -->
+                <div class="data-column">
+                    <div class="data-block">
+                        <div class="data-line">
+                            <span class="data-marker">•</span>
+                            231K - 10.003 <span class="comment">// 0092091</span> 34018A 230ALU 12RKSJ
                         </div>
-                        <div class="info-row">
-                            <span class="info-label">» CODE NAME</span>
-                            <span class="info-value">: WHISPERIA</span>
+                        <div class="data-line" style="padding-left: 16px;">
+                            455.KL0.530 - 0003 <span class="comment">// 0092091</span> <span class="comment">//</span> <span class="data-box active">0011 MC</span>
                         </div>
-                        <div class="info-row">
-                            <span class="info-label">» ACTIVE UNTIL</span>
-                            <span class="info-value">: 19/02/2040</span>
+                    </div>
+
+                    <div class="data-block">
+                        <div class="data-line">
+                            <span class="data-highlight">5555530010G003</span> <span class="comment">// 0092091</span> <span class="comment">//</span> <span class="data-box active">0011 MC</span>
+                        </div>
+                        <div class="data-line">
+                            <span class="data-highlight">5555530010G003</span> <span class="comment">// 009<span class="data-dim">2091</span></span> <span class="comment">//</span> <span class="data-box">0011 MC</span>
+                        </div>
+                        <div class="data-line">
+                            <span class="data-highlight">555553<span class="data-dim">0010G003</span></span> <span class="comment">// 0092091</span> <span class="comment">//</span> <span class="data-box">0011 MC</span>
+                        </div>
+                    </div>
+
+                    <div class="data-block">
+                        <div class="nested-data">
+                            <div class="data-line">A8DJ4</div>
+                            <div class="data-line">120800</div>
+                            <div class="data-line">434KR0</div>
+                            <div class="data-line">02G3KL</div>
+                        </div>
+                    </div>
+
+                    <div class="data-block">
+                        <div class="data-line">
+                            <span class="data-marker">•</span> AT <span class="data-marker">››</span> S
+                        </div>
+                        <div class="nested-data">
+                            <div class="system-check">
+                                <span class="data-box">SPD.AD 100</span> <span class="data-marker">››</span> 450
+                            </div>
+                            <div class="system-check">
+                                <span class="data-box">SPD.AD 200</span> <span class="data-marker">››</span> 200
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="data-block">
+                        <div class="data-line">SYS CHECK.INT <span class="data-highlight">45.0201100</span></div>
+                        <div class="nested-data">
+                            <div class="data-line">
+                                SV.ASL.A200 - 670.KSL_100 <span class="data-box">[100/400]</span>
+                            </div>
+                            <div class="data-line">
+                                SV.ASL.A200 - 500.KSL.230 <span class="data-box">[200/400]</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="activity-stats">
-                    <div class="panel-title">Agent Activity</div>
+                <!-- RIGHT COLUMN -->
+                <div class="data-column">
+                    <div class="data-block">
+                        <div class="data-line">
+                            <span class="hex-code">000:2<span class="data-dim">009:</span>50912094</span> <span class="comment">//</span> <span class="comment">//</span> <span class="comment">//</span>
+                        </div>
+                        <div class="data-line">
+                            <span class="hex-code">4912/1091//120</span>
+                        </div>
+                        <div class="data-line">
+                            <span class="hex-code data-dim">00001</span>
+                        </div>
+                    </div>
+
+                    <div class="data-block">
+                        <div class="data-line">
+                            <span class="data-marker">•</span>
+                        </div>
+                        <div class="nested-data">
+                            <div class="data-line">
+                                <span class="hex-code">00023009:<span class="data-highlight">0031270</span>:0001</span> - 0020
+                            </div>
+                            <div class="data-line">
+                                <span class="hex-code">3400-001000102040//120</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="data-block">
+                        <div class="data-line">
+                            <span class="data-marker">››</span>
+                        </div>
+                        <div class="nested-data">
+                            <div class="data-line">
+                                <span class="hex-code">0100002D020 KL 230 0PAP N15 01</span>
+                            </div>
+                            <div class="data-line">
+                                <span class="hex-code">01020</span>
+                            </div>
+                            <div class="data-line">
+                                <span class="hex-code">01200</span> KP
+                            </div>
+                            <div class="nested-data">
+                                <div class="data-line">FT <span class="comment">//</span> 002</div>
+                                <div class="data-line" style="margin-top: 12px;">SVS 00 00</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="data-block" style="margin-top: 48px;">
+                        <div class="data-line">
+                            <span class="data-marker">•</span> <span class="data-marker">•</span>
+                        </div>
+                        <div class="nested-data">
+                            <div class="data-box" style="margin-bottom: 8px;">AR</div>
+                            <div class="data-line">KR</div>
+                            <div class="data-line">01</div>
+                            <div class="data-line">AR</div>
+                            <div class="data-line">
+                                <span class="data-marker">•</span> <span class="data-marker">•</span> AT.5
+                            </div>
+                            <div class="data-line">
+                                <span class="data-marker">•</span> <span class="data-marker">•</span> AR.1
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="data-footer">
+                <div>SEK:450 - PROG.AR0 [45%]</div>
+                <div>ITS.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         SECTION 3 - INTELLIGENCE INTERFACE
+         ═══════════════════════════════════════════════ -->
+    <section class="section" id="intelligence">
+        <div class="intel-container">
+            
+            <!-- LEFT PANEL - AGENT DETAILS -->
+            <div class="glass-panel">
+                <div class="panel-title">Agent Details</div>
+                <div class="panel-subtitle">Detailed dossier</div>
+                
+                <div class="agent-photo">👤</div>
+                
+                <div class="agent-id">AGENT 009X3312</div>
+                
+                <div class="agent-info">
+                    <div class="info-row">
+                        <span style="color: rgba(255,255,255,0.5);">» AGE</span>
+                        <span>: null</span>
+                    </div>
+                    <div class="info-row">
+                        <span style="color: rgba(255,255,255,0.5);">» CODE NAME</span>
+                        <span>: WHISPERIA</span>
+                    </div>
+                    <div class="info-row">
+                        <span style="color: rgba(255,255,255,0.5);">» ACTIVE UNTIL</span>
+                        <span>: 19/02/2040</span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 32px;">
+                    <div class="panel-title">Activity</div>
                     
                     <div class="stats-grid">
                         <div class="stat-item">
@@ -2046,125 +1385,46 @@
                         </div>
                     </div>
                 </div>
-
-                <div style="margin-top: 32px;">
-                    <div class="panel-title">Brief Announcement..</div>
-                    <svg width="150" height="100" style="margin-top: 16px;">
-                        <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(0, 255, 136, 0.2)" stroke-width="1"/>
-                        <circle cx="75" cy="60" r="25" fill="none" stroke="rgba(0, 255, 136, 0.2)" stroke-width="1"/>
-                        <circle cx="100" cy="55" r="35" fill="none" stroke="rgba(0, 255, 136, 0.2)" stroke-width="1"/>
-                        <text x="120" y="25" font-size="10" fill="rgba(255, 255, 255, 0.3)">1231..</text>
-                        <text x="120" y="40" font-size="10" fill="rgba(255, 255, 255, 0.3)">04.50</text>
-                        <text x="120" y="60" font-size="10" fill="rgba(255, 255, 255, 0.3)">4.</text>
-                        <text x="120" y="75" font-size="10" fill="rgba(255, 255, 255, 0.3)">04</text>
-                    </svg>
-                </div>
             </div>
 
-            <!-- CENTER PANEL - MAP -->
-            <div class="glass-panel center-panel">
-                <div class="operation-info">
-                    <div class="panel-subtitle">Target Operation ...</div>
-                    <div class="operation-location">EUROPE</div>
-                    <div class="operation-desc">
-                        Intelligence confirms the world's most notorious drug trafficker was last seen in this area 30 minutes ago. Surveillance teams are on high alert.
-                    </div>
+            <!-- CENTER PANEL - ENCRYPTED CHAT -->
+            <div class="glass-panel">
+                <h2 class="panel-header">▸ Encrypted Chat</h2>
+                
+                <div class="sphere-container">
+                    <div class="wire-sphere"></div>
                 </div>
 
-                <div class="map-container">
-                    <div class="hud-system">
-                        <!-- Corner Brackets -->
-                        <div class="corner-bracket top-left"></div>
-                        <div class="corner-bracket top-right"></div>
-                        <div class="corner-bracket bottom-left"></div>
-                        <div class="corner-bracket bottom-right"></div>
-                        
-                        <!-- Main Circle -->
-                        <div class="hud-circle"></div>
-                        
-                        <!-- Dashed Rotating Circle -->
-                        <div class="dashed-circle"></div>
-                        
-                        <!-- Orbital Ring -->
-                        <div class="orbital-ring">
-                            <div class="orbital-element"></div>
-                            <div class="orbital-element"></div>
-                            <div class="orbital-element"></div>
-                            <div class="orbital-element"></div>
-                        </div>
-                        
-                        <!-- Center Content -->
-                        <div class="hud-center">
-                            <div class="hud-icon">◈</div>
-                            <div class="hud-title"><br><br></div>
-                            <div class="hud-subtitle">TRACKING SYSTEM</div>
-                        </div>
-                        
-                        <!-- Crosshair -->
-                        <div class="crosshair">
-                            <div class="crosshair-h"></div>
-                            <div class="crosshair-v"></div>
-                        </div>
-                        
-                        <!-- Scanning Line -->
-                        <div class="scan-line"></div>
-                        
-                        <!-- Technical Lines -->
-                        <div class="tech-line horizontal line-1"></div>
-                        <div class="tech-line horizontal line-2"></div>
-                        <div class="tech-line horizontal line-3"></div>
-                        <div class="tech-line horizontal line-4"></div>
-                        
-                        <!-- Target Markers -->
-                        <div class="target-marker marker-1" data-location="USA"></div>
-                        <div class="target-marker marker-2" data-location="AFRICA"></div>
-                        <div class="target-marker marker-3" data-location="EUROPE"></div>
-                        
-                        <!-- Data Points -->
-                        <div class="data-point point-1">[ ALPHA ]</div>
-                        <div class="data-point point-2">94.2 B-LE</div>
-                        <div class="data-point point-3">VECTOR: 8°</div>
-                        <div class="data-point point-4">SIGNAL: 94.2%</div>
-                        <div class="data-point point-5">TRACKING</div>
-                        
-                        <!-- Info Box -->
-                        <div class="hud-info-box">TARGET ACQUIRED</div>
-                    </div>
-                </div>
-
-                <div class="mini-map">
-                    <div class="mini-map-title">Target Operation</div>
-                    <div class="mini-map-region">
-                        <svg width="100%" height="60" viewBox="0 0 200 60" style="position: absolute; top: 0;">
-                            <path d="M 10,30 L 40,25 L 70,35 L 100,28 L 130,32 L 160,27 L 190,30" 
-                                  fill="none" stroke="var(--color-danger)" stroke-width="2" opacity="0.5"/>
-                            <circle cx="40" cy="25" r="3" fill="var(--color-danger)"/>
-                            <circle cx="130" cy="32" r="3" fill="var(--color-danger)"/>
-                        </svg>
-                    </div>
-                    <div class="operation-location" style="margin-top: 8px; font-size: 12px;">SWITZERLAND</div>
-                    <div class="operation-desc" style="font-size: 10px;">
-                        A high-level cyberattack was traced back to a hidden server farm in this district just 20 minutes ago.
-                    </div>
-                </div>
-
-                <div class="timeline">
-                    <div class="timeline-bar" style="height: 40%;"></div>
-                    <div class="timeline-bar" style="height: 60%;"></div>
-                    <div class="timeline-bar" style="height: 30%;"></div>
-                    <div class="timeline-bar" style="height: 80%;"></div>
-                    <div class="timeline-bar" style="height: 50%;"></div>
-                    <div class="timeline-bar" style="height: 70%;"></div>
-                    <div class="timeline-bar" style="height: 45%;"></div>
-                    <div class="timeline-bar" style="height: 90%;"></div>
+                <div class="chat-log">
+                    <div class="chat-timestamp"># 2025-06-17 14:23 UTC</div>
+                    <div class="chat-line">> [AGNT:gh0stfire] :: INIT >> ΔΔΔ loading</div>
+                    <div class="chat-line">> CHKZ | 1231.9085454.560...√R3</div>
+                    <div class="chat-status">> KEY LOCKED</div>
+                    <div class="chat-line">> MSG >> 'mission override initiated...'</div>
+                    
+                    <div class="chat-timestamp"># 2025-06-17 14:34 UTC</div>
+                    <div class="chat-line">> [AGNT:zer0Night] :: RESP >> ACK...#546⚡</div>
+                    <div class="chat-line">> NODE-4: 87867 ●█████ loading</div>
+                    <div class="chat-status">> DATA/ENCRYPT Δ...complete</div>
+                    <div class="chat-line">> 'beacon 7A ▷ pinged ◁ trace logs'</div>
+                    
+                    <div class="chat-timestamp"># 2025-06-17 14:37 UTC</div>
+                    <div class="chat-line">> [AGNT:bl4ckRaven] :: relay @ 8.2</div>
+                    <div class="chat-status">> _COMMS STATUS: distorted_</div>
+                    <div class="chat-line">> DECRYPT: *visual on suspect-41*</div>
+                    
+                    <div class="chat-timestamp"># 2025-06-17 14:39 UTC</div>
+                    <div class="chat-line">> SYSTEM WARNING :: UNUSUAL TRAFFIC</div>
+                    <div class="chat-line">> firewall reroute ::: [CODE 4657]</div>
+                    <div class="chat-status">> backup relay :: channel 9-B active</div>
                 </div>
             </div>
 
             <!-- RIGHT PANEL - OPERATIONS LIST -->
-            <div class="glass-panel right-panel">
+            <div class="glass-panel" style="overflow-y: auto;">
                 <div class="ops-header">
                     <div>
-                        <span class="ops-title">Operations List</span>
+                        <span class="ops-title">Operations</span>
                         <span class="ops-count">(20)</span>
                     </div>
                 </div>
@@ -2205,15 +1465,6 @@
                 </div>
 
                 <div class="operation-card">
-                    <div class="op-code">Mission Code: Omega</div>
-                    <div class="op-mission">Track high-value target in Eastern Europe</div>
-                    <div class="op-actions">
-                        <button class="op-btn">Details</button>
-                        <button class="op-btn">Join Mission »</button>
-                    </div>
-                </div>
-
-                <div class="operation-card">
                     <div class="op-code">Mission Code: gh@etline</div>
                     <div class="op-mission">Monitor rogue agent communications in Berlin</div>
                     <div class="op-actions">
@@ -2236,59 +1487,82 @@
     </section>
 
     <script>
-        // Target markers interaction
-        document.querySelectorAll('.target-marker').forEach(marker => {
-            marker.addEventListener('click', function() {
-                const location = this.dataset.location;
-                const infoBox = document.querySelector('.hud-info-box');
-                infoBox.textContent = `TARGET: ${location} - LOCKED`;
-                infoBox.style.color = 'var(--color-danger)';
+        // ═══════════════════════════════════════════════
+        // NAVIGATION
+        // ═══════════════════════════════════════════════
+        
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
                 
-                setTimeout(() => {
-                    infoBox.textContent = 'TARGET ACQUIRED';
-                    infoBox.style.color = 'var(--color-accent)';
-                }, 2000);
-            });
-            
-            marker.addEventListener('mouseenter', function() {
-                this.style.transform = 'scale(1.3)';
-                this.style.borderWidth = '3px';
-            });
-            
-            marker.addEventListener('mouseleave', function() {
-                this.style.transform = 'scale(1)';
-                this.style.borderWidth = '2px';
+                const target = this.getAttribute('href');
+                document.querySelector(target).scrollIntoView({ behavior: 'smooth' });
             });
         });
 
-        // Create scale marks dynamically
-        const scaleMarks = document.createElement('div');
-        scaleMarks.className = 'scale-marks';
-        for (let i = 0; i < 36; i++) {
-            const mark = document.createElement('div');
-            mark.className = 'scale-mark';
-            mark.style.transform = `rotate(${i * 10}deg) translateY(-175px)`;
-            scaleMarks.appendChild(mark);
-        }
-        document.querySelector('.hud-system').appendChild(scaleMarks);
+        // Update active nav on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.section');
+            const scrollPos = window.scrollY + 100;
+            
+            sections.forEach(section => {
+                const top = section.offsetTop;
+                const height = section.offsetHeight;
+                const id = section.getAttribute('id');
+                
+                if (scrollPos >= top && scrollPos < top + height) {
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === '#' + id) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        });
 
-        // Animate data points
-        const dataPoints = document.querySelectorAll('.data-point');
+        // ═══════════════════════════════════════════════
+        // INTERACTIVE ELEMENTS
+        // ═══════════════════════════════════════════════
+
+        // Random grid animation
         setInterval(() => {
-            dataPoints.forEach(point => {
-                if (Math.random() > 0.7) {
-                    point.style.opacity = '0.5';
-                    setTimeout(() => {
-                        point.style.opacity = '1';
-                    }, 200);
+            document.querySelectorAll('.grid-dot, .bottom-grid-cell').forEach(cell => {
+                if (Math.random() > 0.85) {
+                    cell.classList.toggle('active');
                 }
             });
         }, 2000);
 
-        // Timeline bars animation
-        document.querySelectorAll('.timeline-bar').forEach(bar => {
-            bar.addEventListener('mouseenter', function() {
-                this.style.height = Math.random() * 80 + 20 + '%';
+        // Terminate button
+        const terminateBtn = document.querySelector('.terminate-btn');
+        if (terminateBtn) {
+            terminateBtn.addEventListener('click', function() {
+                this.textContent = 'TERMINATING...';
+                this.style.borderColor = 'var(--color-danger)';
+                this.style.color = 'var(--color-danger)';
+                setTimeout(() => {
+                    this.textContent = 'TERMINATED';
+                }, 1500);
+                setTimeout(() => {
+                    this.textContent = 'TERMINATE';
+                    this.style.borderColor = 'var(--color-accent)';
+                    this.style.color = 'var(--color-accent)';
+                }, 4000);
+            });
+        }
+
+        // Action buttons
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.style.borderColor = 'var(--color-accent)';
+                this.style.boxShadow = '0 0 20px var(--glass-glow)';
+                setTimeout(() => {
+                    this.style.borderColor = 'var(--glass-border)';
+                    this.style.boxShadow = 'none';
+                }, 300);
             });
         });
 
@@ -2313,6 +1587,7 @@
         // Animate stats on load
         function animateValue(id, start, end, duration) {
             const obj = document.getElementById(id);
+            if (!obj) return;
             const range = end - start;
             let current = start;
             const increment = end > start ? 1 : -1;
@@ -2332,12 +1607,18 @@
             animateValue('stat-failed', 0, 27, 1400);
         });
 
-        // Random timeline animation
-        setInterval(() => {
-            document.querySelectorAll('.timeline-bar').forEach(bar => {
-                bar.style.height = Math.random() * 80 + 20 + '%';
-            });
-        }, 3000);
+        // Auto-scroll chat log
+        const chatLog = document.querySelector('.chat-log');
+        if (chatLog) {
+            let scrollPos = 0;
+            setInterval(() => {
+                scrollPos += 0.5;
+                if (scrollPos >= chatLog.scrollHeight - chatLog.clientHeight) {
+                    scrollPos = 0;
+                }
+                chatLog.scrollTop = scrollPos;
+            }, 50);
+        }
     </script>
 
 </body>
